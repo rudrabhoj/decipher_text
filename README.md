@@ -15,5 +15,4 @@ Defining features (which would seperate it from other similar FOSS):
 2. Easy to manage loading and saving of the project files.
 3. Efficient handling of memory.
 4. Multi-language recognization support
-5. Truly cross platforms with binary packages for Linux, FreeBSD, Windows and OS X. Possibly even Haiku.
-
+5. Truly cross platforms with binary packages for Linux, FreeBSD, Windows and OS X. Possibly HaikuOS.
