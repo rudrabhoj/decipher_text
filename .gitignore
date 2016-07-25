@@ -30,9 +30,10 @@
 bin/*
 debug/*
 
-#Generated Makefiles
+#Generated Build related Files
 Makefile
 work.sh
+.qmake.stash
 
 #SUBLIME SPECIFIC
 # cache files for sublime text
