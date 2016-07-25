@@ -16,3 +16,9 @@ Defining features (which would seperate it from other similar FOSS):
 3. Efficient handling of memory.
 4. Multi-language recognization support
 5. Truly cross platforms with binary packages for Linux, FreeBSD, Windows and OS X. Possibly HaikuOS.
+
+#How to Build
+qmake
+make
+
+Generated binary file is in bin sub-directory.
