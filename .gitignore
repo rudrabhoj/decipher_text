@@ -29,3 +29,7 @@
 *.app
 bin/*
 debug/*
+
+#Generated Makefiles
+Makefile
+work.sh
