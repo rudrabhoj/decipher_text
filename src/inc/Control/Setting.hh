@@ -26,23 +26,23 @@ private:
 public:
   Setting();
   //Getters
-  void getTesseractPath(QString path);
-  void getTessdataPath(QString path);
+  QString getTesseractPath();
+  QString getTessdataPath();
 
-  void getLang1(QString lang);
-  void getLang2(QString lang);
-  void getLang3(QString lang);
-  void getLang4(QString lang);
-  void getLang5(QString lang);
+  QString getLang1();
+  QString getLang2();
+  QString getLang3();
+  QString getLang4();
+  QString getLang5();
 
-  void getAppName(QString name);
-  void getInterfaceLanguage(QString lang);
+  QString getAppName();
+  QString getInterfaceLanguage();
 
-  void getWindowState(bool state);
-  void getWindowXPos(int pos);
-  void getWindowYPos(int pos);
-  void getWindowWidth(int width);
-  void getWindowHeight(int height);
+  bool getWindowState();
+  int getWindowXPos();
+  int getWindowYPos();
+  int getWindowWidth();
+  int getWindowHeight();
 
   //Setters
   void setTesseractPath(QString path);
