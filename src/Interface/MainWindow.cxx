@@ -10,6 +10,7 @@
 #include <QGraphicsView>
 #include <QTextEdit>
 #include <QSplitter>
+#include <QList> 
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
   setWindowTitle("Decipher Text");
@@ -45,7 +46,7 @@ void MainWindow::configurePageList(){
 
 void MainWindow::configureCanvas(){
   canvas->setParent(this);
-  canvas->addText("Hello, World");
+  canvas->addText("Our Glorious scans would be here soon.");
   canvasDisplay->setParent(this);
   canvasDisplay->setScene(canvas);
 }
@@ -55,12 +56,16 @@ void MainWindow::configureEditor(){
 }
 
 void MainWindow::configureSplitters(){
+  QList<int> sizes = {15, 605, 605};
+
   mainSplitters->setOrientation(Qt::Horizontal);
   mainSplitters->setParent(this);
 
   mainSplitters->addWidget(pageList);
   mainSplitters->addWidget(canvasDisplay);
   mainSplitters->addWidget(editor);
+
+  mainSplitters->setSizes(sizes);
 }
 
 void MainWindow::configureLayout(){
