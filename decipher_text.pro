@@ -13,5 +13,6 @@ OBJECTS_DIR=obj
 # Input
 SOURCES += src/main.cxx
 SOURCES += src/Control/Setting.cxx
+SOURCES += src/Interface/MainWindow.cxx
 
 QT += widgets

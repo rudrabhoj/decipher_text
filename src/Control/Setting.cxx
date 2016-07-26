@@ -65,7 +65,7 @@ int Setting::getWindowHeight(){
 
 //Setters
 void Setting::setTesseractPath(QString path){
-  tesserectPath = path;
+  tesseractPath = path;
 }
 
 void Setting::setTessdataPath(QString path){
