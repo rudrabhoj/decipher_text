@@ -4,7 +4,7 @@
 
 TEMPLATE = app
 TARGET = decipher_text
-INCLUDEPATH += .
+INCLUDEPATH += src/inc
 
 #DIRS
 DESTDIR=bin
@@ -12,5 +12,6 @@ OBJECTS_DIR=obj
 
 # Input
 SOURCES += src/main.cxx
+SOURCES += src/Control/Setting.cxx
 
 QT += widgets
