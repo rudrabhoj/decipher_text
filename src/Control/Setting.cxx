@@ -5,7 +5,7 @@ Setting::Setting(){
   std::cout << "Setting is working" << std::endl;
 }
 
-
+//Getters
 QString Setting::getTesseractPath(){
   return tesseractPath;
 }
@@ -61,24 +61,61 @@ int Setting::getWindowWidth(){
 int Setting::getWindowHeight(){
   return windowHeight;
 }
-/*
 
-  //Setters
-void Setting::setTesseractPath(QString path);
-void Setting::setTessdataPath(QString path);
 
-void Setting::setLang1(QString lang);
-void Setting::setLang2(QString lang);
-void Setting::setLang3(QString lang);
-void Setting::setLang4(QString lang);
-void Setting::setLang5(QString lang);
+//Setters
+void Setting::setTesseractPath(QString path){
+  tesserectPath = path;
+}
 
-void Setting::setAppName(QString name);
-void Setting::setInterfaceLanguage(QString lang);
+void Setting::setTessdataPath(QString path){
+  tessdataPath = path;
+}
 
-void Setting::setWindowState(bool state);
-void Setting::setWindowXPos(int pos);
-void Setting::setWindowYPos(int pos);
-void Setting::setWindowWidth(int width);
-void Setting::setWindowHeight(int height);
-*/
+void Setting::setLang1(QString lang){
+  lang1 = lang;
+}
+
+void Setting::setLang2(QString lang){
+  lang2 = lang;
+}
+
+void Setting::setLang3(QString lang){
+  lang3 = lang;
+}
+
+void Setting::setLang4(QString lang){
+  lang4 = lang;
+}
+
+void Setting::setLang5(QString lang){
+  lang5 = lang;
+}
+
+void Setting::setAppName(QString name){
+  appName = name;
+}
+
+void Setting::setInterfaceLanguage(QString lang){
+  interfaceLanguage = lang;
+}
+
+void Setting::setWindowState(bool state){
+  windowState = state;
+}
+
+void Setting::setWindowXPos(int pos){
+  windowXPos = pos;
+}
+
+void Setting::setWindowYPos(int pos){
+  windowYPos = pos;
+}
+
+void Setting::setWindowWidth(int width){
+  windowWidth = width;
+}
+
+void Setting::setWindowHeight(int height){
+  windowHeight = height;
+}
