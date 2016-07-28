@@ -1,8 +1,90 @@
 #include <Control/Setting.hh>
-#include <iostream>
+#include <Control/ControlData.hh>
 
-Setting::Setting(){
-  std::cout << "Setting is working" << std::endl;
+#include <iostream>
+#include <QCoreApplication>
+#include <QDir>
+#include <QFileInfo>
+
+
+Setting::Setting(void *ctrlData){
+  localControl = ctrlData;
+  setDefaults();
+}
+
+void Setting::setDefaults(){
+  setTessdataDefault();
+  setTesseractDefaults();
+  setInterfaceDefaults();
+  setLanguageDefaults();
+  setResourceDefaults();
+}
+
+void Setting::setInterfaceDefaults(){
+  appName = "Decipher Text";
+  interfaceLanguage = "en_US";
+  windowState = false;
+  windowXPos = 0;
+  windowYPos = 0;
+  windowWidth = 0;
+  windowHeight = 0;
+}
+
+void Setting::setResourceDefaults(){
+  ControlData *dat;
+  dat = static_cast<ControlData*>(localControl);
+
+  binRoot = QCoreApplication::applicationDirPath();
+  decipherDataPath = binRoot + "/../share/decipher_text";
+  iconDir = decipherDataPath + "/icons";
+}
+
+void Setting::setTessdataDefault(){
+  /*
+    ALERT: Make this cross platform!!
+  */
+
+  QString path;
+
+  if (QDir("/usr/share/tessdata").exists()){
+    path = "/usr/share";
+  } else if(QDir("/usr/local/share/tessdata").exists()){
+    path = "/usr/local/share";
+  } else {
+    path = "";
+  }
+
+  setTessdataPath(path);
+}
+
+void Setting::setLanguageDefaults(){
+  setLang1("eng");
+  setLang2("");
+  setLang3("");
+  setLang4("");
+  setLang5("");
+}
+
+void Setting::setTesseractDefaults(){
+  /*
+    ALERT: Make this cross platform!!
+  */
+  QFileInfo location1;
+  QFileInfo location2;
+  QString path;
+
+  location1.setFile("/usr/bin/tesseract");
+  location2.setFile("/usr/local/bin/tesseract");
+
+  if(location1.exists() && location1.isFile()){
+    path = "/usr/bin/tesseract";
+  } else if(location2.exists() && location2.isFile()) {
+    path = "/usr/local/bin/tesseract";
+  } else {
+    path = "";
+  }
+
+  setTessdataPath(path);
 }
 
 //Getters
@@ -62,6 +144,13 @@ int Setting::getWindowHeight(){
   return windowHeight;
 }
 
+QString Setting::getDecipherDataPath(){
+  return decipherDataPath;
+}
+
+QString Setting::getIconDir(){
+  return iconDir;
+}
 
 //Setters
 void Setting::setTesseractPath(QString path){
@@ -118,4 +207,8 @@ void Setting::setWindowWidth(int width){
 
 void Setting::setWindowHeight(int height){
   windowHeight = height;
+}
+
+void Setting::setDecipherDataPath(QString path){
+  decipherDataPath = path;
 }

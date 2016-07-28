@@ -2,9 +2,12 @@
 #define __CONTROL_SETTING_H__
 
 #include <QString>
+#include <QCoreApplication>
 
 class Setting{
 private:
+  void *localControl;
+
   //Tesseract Preferances
   QString tesseractPath;
   QString tessdataPath;
@@ -23,8 +26,20 @@ private:
   int windowWidth;
   int windowHeight;
 
+  //Resource paths
+  QString binRoot;
+  QString decipherDataPath;
+  QString iconDir;
+
+  void setDefaults();
+  void setTessdataDefault();
+  void setTesseractDefaults();
+  void setLanguageDefaults();
+  void setInterfaceDefaults();
+  void setResourceDefaults();
+
 public:
-  Setting();
+  Setting(void *ctrlData);
   //Getters
   QString getTesseractPath();
   QString getTessdataPath();
@@ -44,6 +59,9 @@ public:
   int getWindowWidth();
   int getWindowHeight();
 
+  QString getDecipherDataPath();
+  QString getIconDir();
+
   //Setters
   void setTesseractPath(QString path);
   void setTessdataPath(QString path);
@@ -62,6 +80,8 @@ public:
   void setWindowYPos(int pos);
   void setWindowWidth(int width);
   void setWindowHeight(int height);
+
+  void setDecipherDataPath(QString path);
 };
 
 #endif

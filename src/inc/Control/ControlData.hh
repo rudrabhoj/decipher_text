@@ -4,11 +4,17 @@
 
 class ControlData{
 private:
-	Setting *preferences;
+  Setting *preferences;
 
   void allocateResources();
+  void deallocateResources();
 public:
-  ControlData();
+  char **argv;
+  int argc;
+
+  ControlData(int inArgc, char *inArgv[]);
+  ~ControlData();
+
   Setting *getSetting();
 };
 

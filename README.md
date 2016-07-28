@@ -7,7 +7,8 @@ I do not use Windows for anything other than gaming, and even if I did, I often 
 ##Dependencies
 1. Qt 5.x   
 2. libtesseract  
-3. Imagemagick  
+3. Leptonica  
+4. Imagemagick  
 
 ##Defining features (which would seperate it from other similar FOSS)
 1. Better proof-reading. Text the cursor is on should be highlighted in the image.  

@@ -16,5 +16,7 @@ SOURCES += src/Control/ControlData.cxx
 SOURCES += src/Control/Setting.cxx
 SOURCES += src/Interface/MainWindow.cxx
 
+#Link
+
 QT += widgets
 QT += core
