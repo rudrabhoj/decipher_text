@@ -5,17 +5,19 @@ Sure, there exist quite a few GUI frontends for the TesseractOCR- but none of th
 I do not use Windows for anything other than gaming, and even if I did, I often work with multi-lingual texts containing both Latin and Devangari writing systems which no major commercial OCR software supports.  
 
 ##Dependencies
-1. Qt 5.x   
+1. Qt 5.x (5.7+ recommended)   
 2. libtesseract  
 3. Leptonica  
 4. Imagemagick  
 
-##Defining features (which would seperate it from other similar FOSS)
-1. Better proof-reading. Text the cursor is on should be highlighted in the image.  
+##Defining features (which would seperate it from similar FOSS)
+1. Better proof-reading. Text the cursor is on will be highlighted in the image.  
 2. Easy to manage loading and saving of the project files.  
 3. Efficient handling of memory.  
 4. Recognition support for the multi-lingual text.  
-5. Truly cross platform with binary packages for Linux, FreeBSD, Windows and OS X. Possibly even HaikuOS.  
+5. Multi-core support  
+6. Built-in image manipulation support to make OCR process simpler  
+7. Truly cross platform with binary packages for Linux, FreeBSD, Windows and OS X. Possibly even HaikuOS.  
 
 ##How to Build
 qmake  
