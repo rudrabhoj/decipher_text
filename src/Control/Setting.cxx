@@ -7,8 +7,7 @@
 #include <QFileInfo>
 
 
-Setting::Setting(void *ctrlData){
-  localControl = ctrlData;
+Setting::Setting(){
   setDefaults();
 }
 
@@ -16,7 +15,6 @@ void Setting::setDefaults(){
   setTessdataDefault();
   setTesseractDefaults();
   setInterfaceDefaults();
-  setLanguageDefaults();
   setResourceDefaults();
 }
 
@@ -31,9 +29,6 @@ void Setting::setInterfaceDefaults(){
 }
 
 void Setting::setResourceDefaults(){
-  ControlData *dat;
-  dat = static_cast<ControlData*>(localControl);
-
   binRoot = QCoreApplication::applicationDirPath();
   decipherDataPath = binRoot + "/../share/decipher_text";
   iconDir = decipherDataPath + "/icons";
@@ -55,14 +50,6 @@ void Setting::setTessdataDefault(){
   }
 
   setTessdataPath(path);
-}
-
-void Setting::setLanguageDefaults(){
-  setLang1("eng");
-  setLang2("");
-  setLang3("");
-  setLang4("");
-  setLang5("");
 }
 
 void Setting::setTesseractDefaults(){
@@ -94,26 +81,6 @@ QString Setting::getTesseractPath(){
 
 QString Setting::getTessdataPath(){
   return tessdataPath;
-}
-
-QString Setting::getLang1(){
-  return lang1;
-}
-
-QString Setting::getLang2(){
-  return lang2; 
-}
-
-QString Setting::getLang3(){
-  return lang3; 
-}
-
-QString Setting::getLang4(){
-  return lang4; 
-}
-
-QString Setting::getLang5(){
-  return lang5; 
 }
 
 QString Setting::getAppName(){
@@ -161,25 +128,6 @@ void Setting::setTessdataPath(QString path){
   tessdataPath = path;
 }
 
-void Setting::setLang1(QString lang){
-  lang1 = lang;
-}
-
-void Setting::setLang2(QString lang){
-  lang2 = lang;
-}
-
-void Setting::setLang3(QString lang){
-  lang3 = lang;
-}
-
-void Setting::setLang4(QString lang){
-  lang4 = lang;
-}
-
-void Setting::setLang5(QString lang){
-  lang5 = lang;
-}
 
 void Setting::setAppName(QString name){
   appName = name;

@@ -4,6 +4,7 @@
 #include <Control/Setting.hh>
 #include <Interface/MainWindow.hh>
 #include <Control/ControlData.hh>
+#include <Control/Language.hh>
 
 int main(int argc, char *argv[]){
   int rc;

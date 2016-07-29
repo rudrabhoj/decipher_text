@@ -20,13 +20,13 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 
   configureSplitters();
 
-  configureLayout();
-
   configureAction();
 
   configureMenu();
 
   configureToolbar();
+
+  configureLayout();
 
   show();
 }
@@ -113,13 +113,13 @@ void MainWindow::configureAction(){
   exit = new QAction(exitString);
   exit->setIconVisibleInMenu(false);
 
-  zoomIn = new QAction(QIcon(zoomInPix), exitString);
+  zoomIn = new QAction(QIcon(zoomInPix), zoomInString);
   zoomIn->setIconVisibleInMenu(false);
 
-  zoomOut = new QAction(QIcon(zoomOutPix), exitString);
+  zoomOut = new QAction(QIcon(zoomOutPix), zoomOutString);
   zoomOut->setIconVisibleInMenu(false);
 
-  zoomNormal = new QAction(QIcon(zoomNormalPix), exitString);
+  zoomNormal = new QAction(QIcon(zoomNormalPix), zoomNormalString);
   zoomNormal->setIconVisibleInMenu(false);
 
   orcNow = new QAction(QIcon(ocrNowPix), orcNowString);
@@ -175,3 +175,4 @@ void MainWindow::configureToolbar(){
   mainToolbar->addAction(orcNow);
   mainToolbar->addAction(prefSettings);
 }
+

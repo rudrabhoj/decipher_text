@@ -1,6 +1,4 @@
 #include <Control/ControlData.hh>
-#include <Control/Setting.hh>
-#include <iostream>
 
 ControlData::ControlData(int inArgc, char *inArgv[]){
   argc = inArgc;
@@ -13,7 +11,8 @@ ControlData::~ControlData(){
 }
 
 void ControlData::allocateResources(){
-  preferences = new Setting(this);
+  preferences = new Setting();
+  language = new Language();
 }
 
 void ControlData::deallocateResources(){
