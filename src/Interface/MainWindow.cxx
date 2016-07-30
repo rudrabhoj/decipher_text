@@ -4,7 +4,7 @@
 MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow(parent){
   localControl = ctrlData;
 
-  setWindowTitle("Decipher Text");
+  setWindowTitle(localControl->getSetting()->getAppName());
   resize(1280, 720);
 
   centralWidget = new QWidget();

@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QToolBar>
-#include <QIcon>
+#include <QIcon> 
 
 
 #include <Control/ControlData.hh>
