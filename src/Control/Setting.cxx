@@ -35,10 +35,6 @@ void Setting::setResourceDefaults(){
 }
 
 void Setting::setTessdataDefault(){
-  /*
-    ALERT: Make this cross platform!!
-  */
-
   QString path;
 
   if (QDir("/usr/share/tessdata").exists()){
@@ -49,24 +45,44 @@ void Setting::setTessdataDefault(){
     path = "";
   }
 
+  #ifdef _WIN32
+    if (QDir("C:\\Tesseract-OCR\\tessdata").exists()){
+      path = "C:\\Tesseract-OCR";
+    } else if(QDir("C:\\Tesseract\\tessdata").exists()){
+      path = "C:\\Tesseract";
+    } else if(QDir("C:\\Program Files\\Tesseract-OCR\\tessdata").exists()){
+      path = "C:\\Program Files\\Tesseract-OCR";
+    } else if(QDir("C:\\Program Files (x86)\\Tesseract-OCR\\tessdata").exists()){
+      path = "C:\\Program Files (x86)\\Tesseract-OCR";
+    } else if(QDir("C:\\Program Files\\Tesseract\\tessdata").exists()){
+      path = "C:\\Program Files\\Tesseract";
+    } else if(QDir("C:\\Program Files (x86)\\Tesseract\\tessdata").exists()){
+      path = "C:\\Program Files (x86)\\Tesseract";
+    } else {
+      path = "";
+    }
+  #endif
+
   setTessdataPath(path);
 }
 
 void Setting::setTesseractDefaults(){
-  /*
-    ALERT: Make this cross platform!!
-  */
   QFileInfo location1;
   QFileInfo location2;
   QString path;
 
+  #ifdef _WIN32
+  location1.setFile("C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe");
+  location2.setFile("C:\\Tesseract-OCR\\tesseract.exe");
+  #else
   location1.setFile("/usr/bin/tesseract");
   location2.setFile("/usr/local/bin/tesseract");
+  #endif
 
   if(location1.exists() && location1.isFile()){
-    path = "/usr/bin/tesseract";
+    path = location1.absoluteFilePath();
   } else if(location2.exists() && location2.isFile()) {
-    path = "/usr/local/bin/tesseract";
+    path = location1.absoluteFilePath();
   } else {
     path = "";
   }
