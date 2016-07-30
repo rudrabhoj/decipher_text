@@ -2,6 +2,8 @@
 #include <iostream>
 
 Language::Language(){
+  allocateResources();
+
   searchLanguages();
 
   //tmp demo code
@@ -9,12 +11,29 @@ Language::Language(){
   requestEnable("hin");
 }
 
+void Language::allocateResources(){
+  localSetting = new Setting();
+}
+
 void Language::searchLanguages(){
+  QString tessDataLocation;
+
+  tessDataLocation = localSetting->getTessdataPath();
+  tessDataLocation += "/tessdata";
+
   languageList.clear();
 
-	languageList.push_back("eng");
-  languageList.push_back("hin");
-  languageList.push_back("ara");
+  QDirIterator tessDirIt(tessDataLocation);
+
+  while(tessDirIt.hasNext()){
+    tessDirIt.next();
+    if ( (QFileInfo(tessDirIt.filePath()).isFile()) &&
+      (QFileInfo(tessDirIt.filePath()).suffix() == "traineddata") ){
+
+      //Apending detected languages!
+      languageList.push_back(tessDirIt.fileName().replace(".traineddata", ""));
+    }
+  }
 }
 
 void Language::refreshLanguageList(){

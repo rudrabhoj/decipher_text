@@ -87,7 +87,7 @@ void Setting::setTesseractDefaults(){
     path = "";
   }
 
-  setTessdataPath(path);
+  setTesseractPath(path);
 }
 
 //Getters
