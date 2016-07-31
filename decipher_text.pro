@@ -16,6 +16,7 @@ SOURCES += src/main.cxx
 SOURCES += src/Control/ControlData.cxx
 SOURCES += src/Control/Setting.cxx
 SOURCES += src/Control/Language.cxx
+SOURCES += src/Document/Page.cxx
 
 SOURCES += src/Interface/MainWindow.cxx
 
