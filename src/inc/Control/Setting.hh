@@ -34,6 +34,10 @@ private:
   void setInterfaceDefaults();
   void setResourceDefaults();
 
+  bool configExists();
+  void newConfigFile();
+  void editConfigFile(QString label, QString value);
+
 public:
   Setting();
   //Getters

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <QStringList>
 #include <QFileDialog>
+#include <QStandardPaths>
 
 MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow(parent){
   localControl = ctrlData;

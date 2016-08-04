@@ -4,11 +4,15 @@
 #include <iostream>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
+#include <QStandardPaths>
+#include <QTextStream>
 
 
 Setting::Setting(){
   setDefaults();
+  newConfigFile();
   //std::cout << getCurrentState().toUtf8().data() << std::endl;
 }
 
@@ -19,10 +23,52 @@ void Setting::setDefaults(){
   setResourceDefaults();
 }
 
+bool Setting::configExists(){
+  QString configFolder;
+  QString configFileName;
+  QFileInfo configFile;
+
+  configFolder = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0];
+  configFolder += "/" + qApp->applicationName();
+  configFileName = configFolder + "/config";
+
+  configFile.setFile(configFileName);
+
+  if(configFile.exists() && configFile.isFile()){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void Setting::newConfigFile(){
+  QString configFolder, configFileName;
+  QFile configFile;
+
+  configFolder = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0];
+  configFolder += "/" + qApp->applicationName();
+  configFileName = configFolder + "/config";
+
+  configFile.setFileName(configFileName);
+
+  if(!QDir(configFolder).exists()){
+    QDir().mkdir(configFolder);
+  }
+
+  if (configFile.open(QIODevice::WriteOnly)){
+    QTextStream out(&configFile);
+
+    out << getCurrentState();
+
+    configFile.close();
+  }
+
+}
+
 QString Setting::getCurrentState(){
   QString state;
 
-  state += "TesseractPath: "         + getTesseractPath();
+  state += "tesseractPath: "         + getTesseractPath();
   state += "\ntessdataPath: "        + getTessdataPath();
   state += "\nappName: "             + getAppName();
   state += "\ninterfaceLanguage: "   + getInterfaceLanguage();
