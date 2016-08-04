@@ -57,7 +57,6 @@ private:
 
   QToolBar *mainToolbar;
 
-
   void allocateResources();
   void configurePageList();
   void configureCanvas();
@@ -65,8 +64,13 @@ private:
   void configureSplitters();
   void configureLayout();
   void configureAction();
+  void configureConnections();
   void configureMenu();
   void configureToolbar();
+
+  void handleOpenProject();
+
+  void showLoadDialog();
 };
 
 #endif

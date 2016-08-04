@@ -9,6 +9,7 @@
 
 Setting::Setting(){
   setDefaults();
+  //std::cout << getCurrentState().toUtf8().data() << std::endl;
 }
 
 void Setting::setDefaults(){
@@ -18,14 +19,38 @@ void Setting::setDefaults(){
   setResourceDefaults();
 }
 
+QString Setting::getCurrentState(){
+  QString state;
+
+  state += "TesseractPath: "         + getTesseractPath();
+  state += "\ntessdataPath: "        + getTessdataPath();
+  state += "\nappName: "             + getAppName();
+  state += "\ninterfaceLanguage: "   + getInterfaceLanguage();
+  state += "\nwindowState: "         + QString::number(getWindowState());
+  state += "\nwindowXPos: "          + QString::number(getWindowXPos());
+  state += "\nwindowYPos: "          + QString::number(getWindowYPos());
+  state += "\nwindowWidth: "         + QString::number(getWindowWidth());
+  state += "\nwindowHeight: "        + QString::number(getWindowHeight());
+  state += "\ndecipherDataPath: "    + getDecipherDataPath();
+  state += "\niconDir: "             + getIconDir();
+
+  return state;
+}
+
+QString Setting::getDefaultState(){
+  setDefaults();
+  
+  return getCurrentState();
+}
+
 void Setting::setInterfaceDefaults(){
   appName = "Decipher Text";
   interfaceLanguage = "en_US";
   windowState = false;
-  windowXPos = 0;
-  windowYPos = 0;
-  windowWidth = 0;
-  windowHeight = 0;
+  windowXPos = 1;
+  windowYPos = 1;
+  windowWidth = 1280;
+  windowHeight = 720;
 }
 
 void Setting::setResourceDefaults(){

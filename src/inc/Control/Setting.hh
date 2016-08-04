@@ -26,6 +26,8 @@ private:
   QString iconDir;
 
   void setDefaults();
+  QString getCurrentState();
+  QString getDefaultState();
   void setTessdataDefault();
   void setTesseractDefaults();
   void setLanguageDefaults();

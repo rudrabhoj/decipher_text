@@ -1,5 +1,7 @@
 #include <Interface/MainWindow.hh>
 #include <iostream>
+#include <QStringList>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow(parent){
   localControl = ctrlData;
@@ -23,6 +25,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
   configureAction();
 
   configureMenu();
+
+  configureConnections();
 
   configureToolbar();
 
@@ -133,6 +137,23 @@ void MainWindow::configureAction(){
 
   documentation = new QAction(documentationString);
   documentation->setIconVisibleInMenu(false);
+}
+
+void MainWindow::configureConnections(){
+  connect(openProject, &QAction::triggered, this, &MainWindow::handleOpenProject);
+}
+
+void MainWindow::handleOpenProject(){
+  QStringList openNames;
+  int i, lim;
+
+  openNames = QFileDialog::getOpenFileNames(this, "Select a project file to open...", QDir::homePath(),
+    "Decipher Text Project (*.dtp)");
+  lim = openNames.length();
+
+  for (i = 0; i < lim; i++){
+    std::cout << openNames[i].toUtf8().data() << std::endl;
+  }
 }
 
 void MainWindow::configureMenu(){
