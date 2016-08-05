@@ -11,9 +11,11 @@
 
 
 Setting::Setting(){
+  if (!configExists()) newConfigFile();
+
   setDefaults();
-  newConfigFile();
-  //std::cout << getCurrentState().toUtf8().data() << std::endl;
+
+  overrideConfig();
 }
 
 void Setting::setDefaults(){
@@ -24,13 +26,10 @@ void Setting::setDefaults(){
 }
 
 bool Setting::configExists(){
-  QString configFolder;
   QString configFileName;
   QFileInfo configFile;
 
-  configFolder = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0];
-  configFolder += "/" + qApp->applicationName();
-  configFileName = configFolder + "/config";
+  configFileName = getConfigFile();
 
   configFile.setFile(configFileName);
 
@@ -45,9 +44,8 @@ void Setting::newConfigFile(){
   QString configFolder, configFileName;
   QFile configFile;
 
-  configFolder = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0];
-  configFolder += "/" + qApp->applicationName();
-  configFileName = configFolder + "/config";
+  configFolder = getConfigDir();
+  configFileName = getConfigFile();
 
   configFile.setFileName(configFileName);
 
@@ -63,6 +61,69 @@ void Setting::newConfigFile(){
     configFile.close();
   }
 
+}
+
+QString Setting::getConfigDir(){
+  QString configFolder;
+  configFolder = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0];
+  configFolder += "/" + qApp->applicationName();
+  return configFolder;
+}
+
+QString Setting::getConfigFile(){
+  return getConfigDir() + "/config";
+}
+
+void Setting::overrideConfig(){
+  //First we'd just implement reading everything line by line:
+  QString configFileName;
+  QFile configFile;
+
+  configFileName = getConfigFile();
+
+  configFile.setFileName(configFileName);
+
+  if (configFile.open(QIODevice::ReadOnly)){
+    QTextStream in(&configFile);
+    while (!in.atEnd()){
+      QString line = in.readLine();
+      interpretConfig(line);
+    }
+  }
+}
+
+//Sorry for unusual arg name. Legacy var name I <3
+void Setting::interpretConfig(QString textToPrint){
+  QString cmmd, argument;
+  int dlimPos;
+
+  dlimPos = textToPrint.indexOf(":");
+  cmmd = textToPrint.left(dlimPos).trimmed();
+  argument = textToPrint.mid(dlimPos + 1).trimmed();
+
+  if(cmmd == "tesseractPath"){
+    setTesseractPath(argument);
+  }else if(cmmd == "tessdataPath"){
+    setTessdataPath(argument);
+  }else if(cmmd == "appName"){
+    setAppName(argument);
+  }else if(cmmd == "interfaceLanguage"){
+    setInterfaceLanguage(argument);
+  }else if(cmmd == "windowState"){
+    setWindowState(argument.toInt());
+  }else if(cmmd == "windowXPos"){
+    setWindowXPos(argument.toInt());
+  }else if(cmmd == "windowYPos"){
+    setWindowYPos(argument.toInt());
+  }else if(cmmd == "windowWidth"){
+    setWindowWidth(argument.toInt());
+  }else if(cmmd == "windowHeight"){
+    setWindowHeight(argument.toInt());
+  }else if(cmmd == "decipherDataPath"){
+    setDecipherDataPath(argument);
+  }else if(cmmd == "iconDir"){
+    setIconDir(argument);
+  }
 }
 
 QString Setting::getCurrentState(){
@@ -246,4 +307,8 @@ void Setting::setWindowHeight(int height){
 
 void Setting::setDecipherDataPath(QString path){
   decipherDataPath = path;
+}
+
+void Setting::setIconDir(QString path){
+  iconDir = path;
 }

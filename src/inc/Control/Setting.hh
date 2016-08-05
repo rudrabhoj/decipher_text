@@ -35,7 +35,11 @@ private:
   void setResourceDefaults();
 
   bool configExists();
+  QString getConfigDir();
+  QString getConfigFile();
   void newConfigFile();
+  void overrideConfig();
+  void interpretConfig(QString textToPrint);
   void editConfigFile(QString label, QString value);
 
 public:
@@ -70,6 +74,7 @@ public:
   void setWindowHeight(int height);
 
   void setDecipherDataPath(QString path);
+  void setIconDir(QString path);
 };
 
 #endif
