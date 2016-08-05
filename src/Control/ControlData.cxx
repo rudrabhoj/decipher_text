@@ -13,10 +13,13 @@ ControlData::~ControlData(){
 void ControlData::allocateResources(){
   preferences = new Setting();
   language = new Language();
+  pubSub = new EventManager();
 }
 
 void ControlData::deallocateResources(){
   delete preferences;
+  delete language;
+  delete pubSub;
 }
 
 Setting* ControlData::getSetting(){

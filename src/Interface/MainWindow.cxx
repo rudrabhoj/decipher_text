@@ -155,6 +155,8 @@ void MainWindow::handleOpenProject(){
   for (i = 0; i < lim; i++){
     std::cout << openNames[i].toUtf8().data() << std::endl;
   }
+
+  localControl->pubSub->publish("testMessage");
 }
 
 void MainWindow::configureMenu(){
@@ -196,5 +198,9 @@ void MainWindow::configureToolbar(){
 
   mainToolbar->addAction(orcNow);
   mainToolbar->addAction(prefSettings);
+}
+
+void MainWindow::testFoo(){
+  std::cout << "Firing testFoo" << std::endl;
 }
 

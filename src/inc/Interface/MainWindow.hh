@@ -21,7 +21,10 @@
 class MainWindow : public QMainWindow {
 public:
   MainWindow(QMainWindow *parent, ControlData *ctrlData);
+
 private:
+  std::function<void()> worker;
+
   ControlData *localControl;
 
   QWidget *centralWidget;
@@ -71,6 +74,10 @@ private:
   void handleOpenProject();
 
   void showLoadDialog();
+
+
+  //Would be used to test features
+  void testFoo();
 };
 
 #endif

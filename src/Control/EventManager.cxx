@@ -81,6 +81,7 @@ void EventManager::publish(QString message){
   exeFunction *localFoo;
 
   messageId = findMessageId(message);
+
   lim = eventList[messageId].fooList.length();
 
   for(i = 0; i < lim; i++){

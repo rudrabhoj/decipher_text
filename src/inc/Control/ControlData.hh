@@ -2,6 +2,7 @@
 #define __CONTROL_CONTROLDATA_H__
 #include <Control/Setting.hh>
 #include <Control/Language.hh>
+#include <Control/EventManager.hh>
 
 class ControlData{
 private:
@@ -13,6 +14,7 @@ private:
 public:
   char **argv;
   int argc;
+  EventManager *pubSub;
 
   ControlData(int inArgc, char *inArgv[]);
   ~ControlData();
