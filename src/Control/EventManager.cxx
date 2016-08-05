@@ -1,4 +1,4 @@
-#include <Control/EventManager>
+#include <Control/EventManager.hh>
 #include <iostream>
 
 EventManager::EventManager(){
@@ -46,18 +46,18 @@ void EventManager::addFoo(QString message, exeFunction *foo){
   int id;
 
   id = findMessageId(message);
-  eventList[id].fooArray.push_back(foo);
+  eventList[id].fooList.push_back(foo);
 }
 
 void EventManager::removeFoo(QString message, exeFunction *foo){
   int messageId, lim, i;
 
   messageId = findMessageId(message);
-  lim = eventList[messageId].fooArray.length();
+  lim = eventList[messageId].fooList.length();
 
   for (i = 0; i < lim; i++){
-    if (eventList[messageId].fooArray[i] == foo){
-      eventList[messageId].fooArray.removeAt(i);
+    if (eventList[messageId].fooList[i] == foo){
+      eventList[messageId].fooList.removeAt(i);
       //break; //Would uncomment it if I believed humans aren't stupid enough to add same sub unlimitd times
     }
   }
@@ -81,10 +81,10 @@ void EventManager::publish(QString message){
   exeFunction *localFoo;
 
   messageId = findMessageId(message);
-  lim = eventList[messageId].fooArray.length();
+  lim = eventList[messageId].fooList.length();
 
   for(i = 0; i < lim; i++){
-    localFoo = eventList[messageId].fooArray[i];
+    localFoo = eventList[messageId].fooList[i];
     (*localFoo)();
   }
 }

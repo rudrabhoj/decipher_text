@@ -16,15 +16,9 @@ SOURCES += src/main.cxx
 SOURCES += src/Control/ControlData.cxx
 SOURCES += src/Control/Setting.cxx
 SOURCES += src/Control/Language.cxx
+SOURCES += src/Control/EventManager.cxx
 SOURCES += src/Document/Page.cxx
 SOURCES += src/Interface/MainWindow.cxx
-
-HEADERS += src/inc/Control/ControlData.hh
-HEADERS += src/inc/Control/Setting.hh
-HEADERS += src/inc/Control/Language.hh
-HEADERS += src/inc/Document/Page.hh
-HEADERS += src/inc/Interface/MainWindow.hh
-
 
 #Link
 
