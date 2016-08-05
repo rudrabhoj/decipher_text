@@ -40,7 +40,7 @@ private:
   void newConfigFile();
   void overrideConfig();
   void interpretConfig(QString textToPrint);
-  void editConfigFile(QString label, QString value);
+  QString modifyArgument(QString reqCmmd, QString reqArg, QString textToPrint);
 
 public:
   Setting();
@@ -75,6 +75,8 @@ public:
 
   void setDecipherDataPath(QString path);
   void setIconDir(QString path);
+
+  void editConfigFile(QString label, QString value);
 };
 
 #endif

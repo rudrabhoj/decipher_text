@@ -74,6 +74,32 @@ QString Setting::getConfigFile(){
   return getConfigDir() + "/config";
 }
 
+void Setting::editConfigFile(QString label, QString value){
+  QString configFileName, configDump;
+  QFile configFile;
+
+  configFileName = getConfigFile();
+
+  configFile.setFileName(configFileName);
+
+  if (configFile.open(QIODevice::ReadOnly)){
+    QTextStream in(&configFile);
+    while (!in.atEnd()){
+      QString line = in.readLine();
+      configDump += modifyArgument(label, value, line) + "\n";
+    }
+  }
+  configFile.close();
+
+  if (configFile.open(QIODevice::WriteOnly)){
+    QTextStream out(&configFile);
+
+    out << configDump;
+
+    configFile.close();
+  }
+}
+
 void Setting::overrideConfig(){
   //First we'd just implement reading everything line by line:
   QString configFileName;
@@ -90,6 +116,7 @@ void Setting::overrideConfig(){
       interpretConfig(line);
     }
   }
+  configFile.close();
 }
 
 //Sorry for unusual arg name. Legacy var name I <3
@@ -123,6 +150,21 @@ void Setting::interpretConfig(QString textToPrint){
     setDecipherDataPath(argument);
   }else if(cmmd == "iconDir"){
     setIconDir(argument);
+  }
+}
+
+QString Setting::modifyArgument(QString reqCmmd, QString reqArg, QString textToPrint){
+  QString cmmd, argument;
+  int dlimPos;
+
+  dlimPos = textToPrint.indexOf(":");
+  cmmd = textToPrint.left(dlimPos).trimmed();
+  argument = textToPrint.mid(dlimPos + 1).trimmed();
+
+  if(reqCmmd == cmmd){
+    return reqCmmd + ": " + reqArg;
+  } else {
+    return textToPrint;
   }
 }
 
