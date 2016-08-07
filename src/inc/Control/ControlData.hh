@@ -3,14 +3,17 @@
 #include <Control/Setting.hh>
 #include <Control/Language.hh>
 #include <Control/EventManager.hh>
+#include <Document/ProjectManager.hh>
 
 class ControlData{
 private:
   Setting *preferences;
   Language *language;
+  ProjectManager *myProject;
 
   void allocateResources();
   void deallocateResources();
+  void configureProjectManager();
 public:
   char **argv;
   int argc;
@@ -20,6 +23,8 @@ public:
   ~ControlData();
 
   Setting *getSetting();
+  EventManager *getPubSub();
+  ProjectManager *getProjectManager();
 };
 
 #endif

@@ -1,33 +1,48 @@
-5#ifndef __DOCUMENT_PROJECTMANAGER_H__
+#ifndef __DOCUMENT_PROJECTMANAGER_H__
 #define __DOCUMENT_PROJECTMANAGER_H__
 
 #include <Document/Page.hh>
-#include <QVector>
+#include <QList>
+#include <QStringList>
+#include <Control/EventManager.hh>
 
 class ProjectManager{
 
 public:
-  ProjectManager(QString projectRootDir);
+  ProjectManager(QString projDirName);
+  void addPages(QStringList pages);
+  void addPages(QString page);
 
-  void setName(QString name);
-  void setSaveState(bool staat);
-  void setprojectFileUrl(QString url);
+  QString getProjectName();
 
-  QString getName();
-  bool getSaveState();
+  QList<Page> emitPages();
 
-  void addPage(QString imageName);
-  void saveProject();
-  void openProject(QString projectFileLink);
+  //Foreign injections
+  void injectEventManager(EventManager *eManager);
 
 private:
-  QString name;
-  QVector<Page> pageList;
+  QString dirName;
+  QString rootDir;
+  QList<Page> pageList;
+  QString projectName;
   bool saveState;
-  QString projectRoot;
-  QString projectFileUrl;
 
-  void moveProjectUrl(QString newUrl);
+  void createEmptyProject();
+  void copyProject(QString newRoot, QString newDir);
+  void addSinglePage(QString page);
+  void createProjectFile(QString projContents);
+  void verifyProjectRoot();
+  void createImageDirs();
+
+  void setSaveState(bool staat);
+
+  bool removeDir(const QString &dirName);
+  QString getWorkingDir();
+
+
+  //Foreign Dependencies
+  EventManager *localEventManager;
+  void publishPagesChanged();
 };
 
 #endif

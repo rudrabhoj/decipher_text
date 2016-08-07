@@ -18,6 +18,7 @@ SOURCES += src/Control/Setting.cxx
 SOURCES += src/Control/Language.cxx
 SOURCES += src/Control/EventManager.cxx
 SOURCES += src/Document/Page.cxx
+SOURCES += src/Document/ProjectManager.cxx
 SOURCES += src/Interface/MainWindow.cxx
 
 #Link

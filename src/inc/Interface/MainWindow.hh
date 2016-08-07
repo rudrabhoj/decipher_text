@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QToolBar>
-#include <QIcon> 
+#include <QIcon>
 
 
 #include <Control/ControlData.hh>
@@ -23,8 +23,6 @@ public:
   MainWindow(QMainWindow *parent, ControlData *ctrlData);
 
 private:
-  std::function<void()> worker;
-
   ControlData *localControl;
 
   QWidget *centralWidget;
@@ -43,6 +41,7 @@ private:
 
   QAction *newProject;
   QAction *openProject;
+  QAction *addImages;
   QAction *saveProject;
   QAction *saveAsProject;
   QAction *exit;
@@ -72,12 +71,16 @@ private:
   void configureToolbar();
 
   void handleOpenProject();
+  void handleAddProject();
 
   void showLoadDialog();
 
 
-  //Would be used to test features
-  void testFoo();
+  //Foreign Dependenices
+  std::function<void()> pageUpdateWrapper;
+  
+  void syncNavbar();
+  void setSignalWrappers();
 };
 
 #endif

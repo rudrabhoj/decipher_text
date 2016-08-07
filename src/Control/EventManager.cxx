@@ -2,7 +2,7 @@
 #include <iostream>
 
 EventManager::EventManager(){
-  std::cout << "Starting the event manager." << std::endl;
+
 }
 
 bool EventManager::eventExists(QString message){

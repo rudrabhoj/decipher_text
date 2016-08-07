@@ -13,6 +13,10 @@ public:
   QString getText();
   void appendWord(QString data, int x1, int y1, int x2, int y2);
 
+  void setFileName(QString fname);
+  QString getFullDisplayLink();
+  QString getThumbLink();
+
 private:
   struct wordUnit{
     QString data;
@@ -30,6 +34,11 @@ private:
   QString imageFull;
   QString imageRefined;
   QString imageThumbnail;
+
+  QString realName;
+  QString fullLink;
+  QString thumbLink;
+
   QVector<wordUnit> content;
 
   void setImagePaths();

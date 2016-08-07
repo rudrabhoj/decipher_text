@@ -4,6 +4,7 @@ ControlData::ControlData(int inArgc, char *inArgv[]){
   argc = inArgc;
   argv = inArgv;
   allocateResources();
+  configureProjectManager();
 }
 
 ControlData::~ControlData(){
@@ -14,14 +15,28 @@ void ControlData::allocateResources(){
   preferences = new Setting();
   language = new Language();
   pubSub = new EventManager();
+  myProject = new ProjectManager("Untitled Project");
+}
+
+void ControlData::configureProjectManager(){
+  myProject->injectEventManager(pubSub);
 }
 
 void ControlData::deallocateResources(){
   delete preferences;
   delete language;
   delete pubSub;
+  delete myProject;
 }
 
 Setting* ControlData::getSetting(){
   return preferences;
+}
+
+EventManager* ControlData::getPubSub(){
+  return pubSub;
+}
+
+ProjectManager* ControlData::getProjectManager(){
+  return myProject;
 }

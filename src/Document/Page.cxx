@@ -3,6 +3,8 @@
 Page::Page(QString prjRoot, int pgIndex){
   projectRoot = prjRoot;
   index = pgIndex;
+
+  setImagePaths();
 }
 
 void Page::setImagePaths(){
@@ -10,6 +12,20 @@ void Page::setImagePaths(){
   imageFull = imageRoot + "/full";
   imageRefined = imageRoot + "/refined";
   imageThumbnail = imageRoot + "/thumbnail";
+}
+
+void Page::setFileName(QString fname){
+  realName = fname;
+  fullLink = imageFull + "/" + fname;
+  thumbLink = imageThumbnail + "/" + fname;
+}
+
+QString Page::getFullDisplayLink(){
+  return fullLink;
+}
+
+QString Page::getThumbLink(){
+  return thumbLink;
 }
 
 void Page::setDisplayHead(int dHead){

@@ -3,6 +3,7 @@
 #include <QStringList>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <Document/Page.hh>
 
 MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow(parent){
   localControl = ctrlData;
@@ -33,6 +34,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 
   configureLayout();
 
+  setSignalWrappers();
+
   show();
 }
 
@@ -47,6 +50,8 @@ void MainWindow::allocateResources(){
 
 void MainWindow::configurePageList(){
   pageList->setParent(centralWidget);
+  pageList->setViewMode(QListView::IconMode);
+  pageList->setIconSize(QSize(104, 148));
 }
 
 void MainWindow::configureCanvas(){
@@ -61,7 +66,7 @@ void MainWindow::configureEditor(){
 }
 
 void MainWindow::configureSplitters(){
-  QList<int> sizes = {15, 605, 605};
+  QList<int> sizes = {100, 300, 300};
 
   mainSplitters->setOrientation(Qt::Horizontal);
   mainSplitters->setParent(centralWidget);
@@ -81,6 +86,7 @@ void MainWindow::configureLayout(){
 void MainWindow::configureAction(){
   QString newProjectString = "&New Project";
   QString openProjectString = "&Open Existing Project";
+  QString addImagesString = "&Add Images";
   QString saveProjectString = "&Save Project";
   QString saveAsProjectString = "&Save Project As";
   QString exitString = "&Exit";
@@ -108,6 +114,8 @@ void MainWindow::configureAction(){
 
   openProject = new QAction(QIcon(openPix), openProjectString);
   openProject->setIconVisibleInMenu(false);
+
+  addImages = new QAction(addImagesString);
 
   saveProject = new QAction(QIcon(savePix), saveProjectString);
   saveProject->setIconVisibleInMenu(false);
@@ -142,6 +150,7 @@ void MainWindow::configureAction(){
 
 void MainWindow::configureConnections(){
   connect(openProject, &QAction::triggered, this, &MainWindow::handleOpenProject);
+  connect(addImages, &QAction::triggered, this, &MainWindow::handleAddProject);
 }
 
 void MainWindow::handleOpenProject(){
@@ -155,9 +164,17 @@ void MainWindow::handleOpenProject(){
   for (i = 0; i < lim; i++){
     std::cout << openNames[i].toUtf8().data() << std::endl;
   }
-
-  localControl->pubSub->publish("testMessage");
 }
+
+void MainWindow::handleAddProject(){
+  QStringList openNames;
+
+  openNames = QFileDialog::getOpenFileNames(this, "Add image files to the project...", QDir::homePath(),
+    "Images (*.png *.xpm *.jpg)");
+
+  localControl->getProjectManager()->addPages(openNames);
+}
+
 
 void MainWindow::configureMenu(){
   QString fileString = "&File";
@@ -167,6 +184,7 @@ void MainWindow::configureMenu(){
   file = this->menuBar()->addMenu(fileString);
   file->addAction(newProject);
   file->addAction(openProject);
+  file->addAction(addImages);
   file->addAction(saveProject);
   file->addAction(saveAsProject);
   file->addAction(exit);
@@ -200,7 +218,26 @@ void MainWindow::configureToolbar(){
   mainToolbar->addAction(prefSettings);
 }
 
-void MainWindow::testFoo(){
-  std::cout << "Firing testFoo" << std::endl;
+
+
+//Dependent on foreign classes
+void MainWindow::syncNavbar(){
+  QList<Page> pageQList;
+  int lim, i;
+
+  pageQList = localControl->getProjectManager()->emitPages();
+  lim = pageQList.length();
+
+  pageList->clear();
+
+  for(i = 0; i < lim; i++){
+    QListWidgetItem *tmpItem = new QListWidgetItem(QIcon(pageQList[i].getThumbLink()), QString::number(i));
+    pageList->addItem(tmpItem);
+  }
 }
 
+void MainWindow::setSignalWrappers(){
+  pageUpdateWrapper = [&](){syncNavbar();};
+
+  localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
+}
