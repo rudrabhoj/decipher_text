@@ -84,6 +84,7 @@ private:
   void syncNavbar();
   void setSignalWrappers();
 
+  QList<Page> *getPageLink();
   QString getThumbnailPage(int index);
   QString getFullPage(int index);
   int getTotalPages();

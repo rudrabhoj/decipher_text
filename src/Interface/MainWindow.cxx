@@ -227,7 +227,12 @@ void MainWindow::testMessagePrint(){
 
 
 
-//Dependent on foreign classes
+//Primary Dependence on Foreign Classes
+QList<Page>* MainWindow::getPageLink(){
+  return localControl->getProjectManager()->emitPages();
+}
+
+//Secondary Dependence on Foreign Classes
 void MainWindow::syncNavbar(){
   int lim, i;
 
@@ -241,22 +246,30 @@ void MainWindow::syncNavbar(){
   }
 }
 
-void MainWindow::setSignalWrappers(){
-  pageUpdateWrapper = [&](){syncNavbar();};
-
-  localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
-}
-
 QString MainWindow::getThumbnailPage(int index){
   QList<Page> *pageQList;
-  pageQList = localControl->getProjectManager()->emitPages();
+  pageQList = getPageLink();
 
   return (*pageQList)[index].getThumbLink();
 }
 
 int MainWindow::getTotalPages(){
   QList<Page> *pageQList;
-  pageQList = localControl->getProjectManager()->emitPages();
+  pageQList = getPageLink();
 
   return pageQList->length();
+}
+
+QString MainWindow::getFullPage(int index){
+  QList<Page> *pageQList;
+  pageQList = getPageLink();
+
+  return (*pageQList)[index].getFullDisplayLink();
+}
+
+//Assists Foreigners
+void MainWindow::setSignalWrappers(){
+  pageUpdateWrapper = [&](){syncNavbar();};
+
+  localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
 }
