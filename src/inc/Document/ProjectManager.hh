@@ -15,7 +15,7 @@ public:
 
   QString getProjectName();
 
-  QList<Page> emitPages();
+  QList<Page> *emitPages();
 
   //Foreign injections
   void injectEventManager(EventManager *eManager);

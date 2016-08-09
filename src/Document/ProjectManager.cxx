@@ -39,8 +39,8 @@ void ProjectManager::verifyProjectRoot(){
   }
 }
 
-QList<Page> ProjectManager::emitPages(){
-  return pageList;
+QList<Page>* ProjectManager::emitPages(){
+  return &pageList;
 }
 
 void ProjectManager::addPages(QStringList pages){
@@ -50,10 +50,13 @@ void ProjectManager::addPages(QStringList pages){
   for(i = 0; i < lim; i++){
     addSinglePage(pages[i]);
   }
+
+  publishPagesChanged();
 }
 
 void ProjectManager::addPages(QString page){
   addSinglePage(page);
+  publishPagesChanged();
 }
 
 void ProjectManager::addSinglePage(QString page){
@@ -84,8 +87,6 @@ void ProjectManager::addSinglePage(QString page){
   dummyPage.setFileName(ofName);
 
   pageList.push_back(dummyPage);
-
-  publishPagesChanged();
 }
 
 void ProjectManager::createEmptyProject(){

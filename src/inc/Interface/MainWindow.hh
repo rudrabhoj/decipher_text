@@ -75,12 +75,18 @@ private:
 
   void showLoadDialog();
 
+  void testMessagePrint();
+
 
   //Foreign Dependenices
   std::function<void()> pageUpdateWrapper;
   
   void syncNavbar();
   void setSignalWrappers();
+
+  QString getThumbnailPage(int index);
+  QString getFullPage(int index);
+  int getTotalPages();
 };
 
 #endif

@@ -66,7 +66,7 @@ void MainWindow::configureEditor(){
 }
 
 void MainWindow::configureSplitters(){
-  QList<int> sizes = {100, 300, 300};
+  QList<int> sizes = {60, 300, 300};
 
   mainSplitters->setOrientation(Qt::Horizontal);
   mainSplitters->setParent(centralWidget);
@@ -151,6 +151,8 @@ void MainWindow::configureAction(){
 void MainWindow::configureConnections(){
   connect(openProject, &QAction::triggered, this, &MainWindow::handleOpenProject);
   connect(addImages, &QAction::triggered, this, &MainWindow::handleAddProject);
+
+  connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
 }
 
 void MainWindow::handleOpenProject(){
@@ -219,19 +221,22 @@ void MainWindow::configureToolbar(){
 }
 
 
+void MainWindow::testMessagePrint(){
+  std::cout << "Test success!" << std::endl;
+}
+
+
 
 //Dependent on foreign classes
 void MainWindow::syncNavbar(){
-  QList<Page> pageQList;
   int lim, i;
 
-  pageQList = localControl->getProjectManager()->emitPages();
-  lim = pageQList.length();
+  lim = getTotalPages();
 
   pageList->clear();
 
   for(i = 0; i < lim; i++){
-    QListWidgetItem *tmpItem = new QListWidgetItem(QIcon(pageQList[i].getThumbLink()), QString::number(i));
+    QListWidgetItem *tmpItem = new QListWidgetItem(QIcon(getThumbnailPage(i)), QString::number(i));
     pageList->addItem(tmpItem);
   }
 }
@@ -240,4 +245,18 @@ void MainWindow::setSignalWrappers(){
   pageUpdateWrapper = [&](){syncNavbar();};
 
   localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
+}
+
+QString MainWindow::getThumbnailPage(int index){
+  QList<Page> *pageQList;
+  pageQList = localControl->getProjectManager()->emitPages();
+
+  return (*pageQList)[index].getThumbLink();
+}
+
+int MainWindow::getTotalPages(){
+  QList<Page> *pageQList;
+  pageQList = localControl->getProjectManager()->emitPages();
+
+  return pageQList->length();
 }
