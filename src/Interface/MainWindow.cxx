@@ -56,7 +56,7 @@ void MainWindow::configurePageList(){
 
 void MainWindow::configureCanvas(){
   canvas->setParent(centralWidget);
-  canvas->addText("Our Glorious scans would be here soon.");
+  //canvas->addText("Our Glorious scans would be here soon.");
   canvasDisplay->setParent(centralWidget);
   canvasDisplay->setScene(canvas);
 }
@@ -222,7 +222,20 @@ void MainWindow::configureToolbar(){
 
 
 void MainWindow::testMessagePrint(){
-  std::cout << "Test success!" << std::endl;
+  int i;
+  QPixmap pagePicture;
+
+  i = pageList->currentRow();
+
+  if (i >= 0){
+    pagePicture.load(getFullPage(i));
+
+    canvas->clear();
+    canvas->addPixmap(pagePicture);
+    canvasDisplay->show();
+
+    std::cout << i << "." << "Test success! " << std::endl;
+  }
 }
 
 
