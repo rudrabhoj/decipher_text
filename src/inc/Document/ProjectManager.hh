@@ -1,5 +1,5 @@
-#ifndef __DOCUMENT_PROJECTMANAGER_H__
-#define __DOCUMENT_PROJECTMANAGER_H__
+#ifndef __DOCUMENT_PROJECTMANAGER_HH__
+#define __DOCUMENT_PROJECTMANAGER_HH__
 
 #include <Document/Page.hh>
 #include <QList>

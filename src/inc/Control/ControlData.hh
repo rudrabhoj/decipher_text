@@ -1,5 +1,5 @@
-#ifndef __CONTROL_CONTROLDATA_H__
-#define __CONTROL_CONTROLDATA_H__
+#ifndef __CONTROL_CONTROLDATA_HH__
+#define __CONTROL_CONTROLDATA_HH__
 #include <Control/Setting.hh>
 #include <Control/Language.hh>
 #include <Control/EventManager.hh>

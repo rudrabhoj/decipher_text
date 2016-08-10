@@ -1,5 +1,5 @@
-#ifndef __CONTROL_LANGUAGE_H__
-#define __CONTROL_LANGUAGE_H__
+#ifndef __CONTROL_LANGUAGE_HH__
+#define __CONTROL_LANGUAGE_HH__
 #include <QString>
 #include <QVector>
 #include <QDirIterator>

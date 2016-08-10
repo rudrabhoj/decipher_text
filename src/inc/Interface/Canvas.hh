@@ -1,5 +1,5 @@
-#ifndef __INTERFACE_CANVAS_H__
-#define __INTERFACE_CANVAS_H__
+#ifndef __INTERFACE_CANVAS_HH__
+#define __INTERFACE_CANVAS_HH__
 
 #include <Control/ControlData.hh>
 

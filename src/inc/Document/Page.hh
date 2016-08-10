@@ -1,5 +1,5 @@
-#ifndef __DOCUMENT_PAGE_H__
-#define __DOCUMENT_PAGE_H__
+#ifndef __DOCUMENT_PAGE_HH__
+#define __DOCUMENT_PAGE_HH__
 
 #include <QString>
 #include <QVector>

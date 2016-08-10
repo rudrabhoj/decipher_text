@@ -1,5 +1,5 @@
-#ifndef __CONTROL_SETTING_H__
-#define __CONTROL_SETTING_H__
+#ifndef __CONTROL_SETTING_HH__
+#define __CONTROL_SETTING_HH__
 
 #include <QString>
 #include <QCoreApplication>

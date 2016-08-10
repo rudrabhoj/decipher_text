@@ -1,5 +1,5 @@
-#ifndef __INTERFACE_MAINWINDOW_H__
-#define __INTERFACE_MAINWINDOW_H__
+#ifndef __INTERFACE_MAINWINDOW_HH__
+#define __INTERFACE_MAINWINDOW_HH__
 #include <QWidget>
 #include <QListWidget>
 #include <QMainWindow>

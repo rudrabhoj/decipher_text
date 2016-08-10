@@ -1,8 +1,8 @@
 // A Simple Pub-Sub Event Manager
 // Thread unsafe. Do not subscribe/unsubscribe in multi-threaded processes.
 
-#ifndef __CONTROL_EVENTMANAGER_H__
-#define __CONTROL_EVENTMANAGER_H__
+#ifndef __CONTROL_EVENTMANAGER_HH__
+#define __CONTROL_EVENTMANAGER_HH__
 
 #include <functional>
 #include <QString>
