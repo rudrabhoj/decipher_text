@@ -5,8 +5,8 @@
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QGraphicsScene>
 #include <QTextEdit>
 #include <QSplitter>
 #include <QList>
