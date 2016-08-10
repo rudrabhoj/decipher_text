@@ -1,19 +1,27 @@
 #ifndef __INTERFACE_CANVAS_H__
 #define __INTERFACE_CANVAS_H__
 
+#include <Control/ControlData.hh>
+
+#include <QMainWindow>
+#include <QWidget>
+#include <QGraphicsView>
 #include <QGraphicsScene>
 
 class Canvas : public QGraphicsView{
 public:
   Canvas(QMainWindow *parent, ControlData *ctrlData);
-  configureSettings(QWidget *parent);
+  void configureSettings(QWidget *parent);
+  void drawPage(QString pageToPrint);
 
 private:
-  QGraphicsView *displayController;
+  ControlData *localControl;
+  QGraphicsScene *displayController;
+  QPixmap *scannedImg;
 
   void allocateResources();
-  void configureParent();
+  void configureParent(QWidget *parent);
   void configureController();
-}
+};
 
 #endif

@@ -42,8 +42,7 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 void MainWindow::allocateResources(){
   pageList = new QListWidget();
   mainLayout = new QHBoxLayout();
-  canvas = new QGraphicsScene();
-  canvasDisplay = new QGraphicsView();
+  canvasObject = new Canvas(0, localControl);
   editor = new QTextEdit();
   mainSplitters = new QSplitter();
 }
@@ -55,10 +54,7 @@ void MainWindow::configurePageList(){
 }
 
 void MainWindow::configureCanvas(){
-  canvas->setParent(centralWidget);
-  //canvas->addText("Our Glorious scans would be here soon.");
-  canvasDisplay->setParent(centralWidget);
-  canvasDisplay->setScene(canvas);
+  canvasObject->configureSettings(centralWidget);
 }
 
 void MainWindow::configureEditor(){
@@ -72,7 +68,7 @@ void MainWindow::configureSplitters(){
   mainSplitters->setParent(centralWidget);
 
   mainSplitters->addWidget(pageList);
-  mainSplitters->addWidget(canvasDisplay);
+  mainSplitters->addWidget(canvasObject);
   mainSplitters->addWidget(editor);
 
   mainSplitters->setSizes(sizes);
@@ -223,19 +219,9 @@ void MainWindow::configureToolbar(){
 
 void MainWindow::testMessagePrint(){
   int i;
-  QPixmap pagePicture;
-
   i = pageList->currentRow();
 
-  if (i >= 0){
-    pagePicture.load(getFullPage(i));
-
-    canvas->clear();
-    canvas->addPixmap(pagePicture);
-    canvasDisplay->show();
-
-    std::cout << i << "." << "Test success! " << std::endl;
-  }
+  if (i >= 0) canvasObject->drawPage(getFullPage(i));
 }
 
 

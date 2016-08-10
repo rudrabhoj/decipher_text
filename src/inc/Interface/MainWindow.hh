@@ -15,6 +15,8 @@
 #include <QToolBar>
 #include <QIcon>
 
+#include <Interface/Canvas.hh>
+
 
 #include <Control/ControlData.hh>
 
@@ -32,8 +34,7 @@ private:
 
   QListWidget *pageList;
 
-  QGraphicsScene *canvas;
-  QGraphicsView *canvasDisplay;
+  Canvas *canvasObject;
 
   QSplitter *mainSplitters;
 
