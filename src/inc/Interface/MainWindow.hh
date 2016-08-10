@@ -68,6 +68,8 @@ private:
   void configureLayout();
   void configureAction();
   void configureConnections();
+  void configureMenuConnections();
+  void configureWidgetConnections();
   void configureMenu();
   void configureToolbar();
 

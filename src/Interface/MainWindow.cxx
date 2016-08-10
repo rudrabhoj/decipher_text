@@ -145,9 +145,19 @@ void MainWindow::configureAction(){
 }
 
 void MainWindow::configureConnections(){
+  configureMenuConnections();
+  configureWidgetConnections();  
+}
+
+void MainWindow::configureMenuConnections(){
   connect(openProject, &QAction::triggered, this, &MainWindow::handleOpenProject);
   connect(addImages, &QAction::triggered, this, &MainWindow::handleAddProject);
+  connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
+  connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
+  connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
+}
 
+void MainWindow::configureWidgetConnections(){
   connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
 }
 
