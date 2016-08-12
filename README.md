@@ -1,4 +1,6 @@
-# decipher_text
+# Decipher Text
+![Screenshot](http://i.imgur.com/hdMn0tf.png "Build from August 12, 2016")
+
 ##Rant
 In my free time I read old books. archive.org finds an avid fan in me. I hate the fact I cannot copy paste. I am unable to decide what I hate more, nuclear weapons or reading from the raw scan of antiquated books. While I can't make the nukes disappear, here we are with a modern GUI front-end for TesseractOCR.  
 Sure, there exist quite a few GUI frontends for the TesseractOCR- but none of them feel good enough. Proof-reading in most of them is as far away from optimum as the two poles of a magnet. Most of them feel second class citizen compared to the Commercial OCR programs.  
