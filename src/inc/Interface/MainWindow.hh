@@ -15,6 +15,9 @@
 #include <QToolBar>
 #include <QIcon>
 
+#include <QVector>
+#include <QString>
+
 #include <Interface/Canvas.hh>
 #include <Interface/SettingDialog.hh>
 
@@ -27,6 +30,10 @@ public:
 
 private:
   ControlData *localControl;
+
+  QVector<QString> allLanguages;
+  QVector<QString> enabledLanguages;
+  QVector<QAction*> languageActions;
 
   QWidget *centralWidget;
 
@@ -59,6 +66,7 @@ private:
 
   QMenu *file;
   QMenu *tools;
+  QMenu *languageList;
   QMenu *help;
 
   QToolBar *mainToolbar;
@@ -70,12 +78,17 @@ private:
   void configureSplitters();
   void configureLayout();
   void configureAction();
+  void configureLanguageActions();
+  void configureLanguageMenu();
   void configureConnections();
+  void configureLanguageConnections();
   void configureSettingWindow();
   void configureMenuConnections();
   void configureWidgetConnections();
   void configureMenu();
   void configureToolbar();
+
+  void handleLanguageChange();
 
   void handleOpenProject();
   void handleAddProject();
@@ -90,6 +103,10 @@ private:
   
   void syncNavbar();
   void setSignalWrappers();
+  void sendEnableLangRequest(QString lang);
+  void sendDisableLangRequest(QString lang);
+
+  void loadLanguages();
 
   QList<Page> *getPageLink();
   QString getThumbnailPage(int index);

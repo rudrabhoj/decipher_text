@@ -24,6 +24,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 
   configureSplitters();
 
+  loadLanguages();
+
   configureAction();
 
   configureMenu();
@@ -144,6 +146,21 @@ void MainWindow::configureAction(){
 
   documentation = new QAction(documentationString);
   documentation->setIconVisibleInMenu(false);
+
+  configureLanguageActions();
+}
+
+void MainWindow::configureLanguageActions(){
+  int i, lim;
+  QAction *lang;
+
+  lim = allLanguages.length();
+
+  for(i = 0; i < lim; i++){
+    lang = new QAction(allLanguages[i]);
+    lang->setCheckable(true);
+    languageActions.push_back(lang);
+  }
 }
 
 void MainWindow::configureSettingWindow(){
@@ -162,10 +179,37 @@ void MainWindow::configureMenuConnections(){
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
   connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
   connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
+
+  configureLanguageConnections();
+}
+
+void MainWindow::configureLanguageConnections(){
+  int i, lim;
+  lim = languageActions.length();
+
+  for(i = 0; i < lim; i++){
+    connect(languageActions[i], &QAction::changed, this, &MainWindow::handleLanguageChange);
+  }
 }
 
 void MainWindow::configureWidgetConnections(){
   connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
+}
+
+void MainWindow::handleLanguageChange(){
+  int i, lim;
+  lim = languageActions.length();
+
+  for(i = 0; i < lim; i++){
+
+    if(languageActions[i]->isChecked()){
+      sendEnableLangRequest(languageActions[i]->text());
+    } else {
+      sendDisableLangRequest(languageActions[i]->text());
+    }
+  }
+
+  std::cout << localControl->getLanguage()->getLanguageArgument().toUtf8().data() << std::endl;
 }
 
 void MainWindow::handleOpenProject(){
@@ -208,9 +252,25 @@ void MainWindow::configureMenu(){
   tools->addAction(orcNow);
   tools->addAction(prefSettings);
 
+  configureLanguageMenu();
+
   help = this->menuBar()->addMenu(helpString);
   help->addAction(about);
   help->addAction(documentation);
+}
+
+void MainWindow::configureLanguageMenu(){
+  int i, lim;
+  QString languageListString;
+
+  lim = languageActions.length();
+  languageListString = "&Languages";
+
+  languageList = this->menuBar()->addMenu(languageListString);
+
+  for(i = 0; i < lim; i++){
+    languageList->addAction( languageActions[i] );
+  }
 }
 
 void MainWindow::configureToolbar(){
@@ -246,6 +306,19 @@ void MainWindow::testMessagePrint(){
 //Primary Dependence on Foreign Classes
 QList<Page>* MainWindow::getPageLink(){
   return localControl->getProjectManager()->emitPages();
+}
+
+void MainWindow::loadLanguages(){
+  allLanguages = localControl->getLanguage()->getAll();
+  enabledLanguages = localControl->getLanguage()->getEnabled();
+}
+
+void MainWindow::sendEnableLangRequest(QString lang){
+  localControl->getLanguage()->requestEnable(lang);
+}
+
+void MainWindow::sendDisableLangRequest(QString lang){
+  localControl->getLanguage()->disableLanguage(lang);
 }
 
 //Secondary Dependence on Foreign Classes

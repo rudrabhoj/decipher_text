@@ -7,8 +7,8 @@ Language::Language(){
   searchLanguages();
 
   //tmp demo code
-  requestEnable("eng");
-  requestEnable("hin");
+  //requestEnable("eng");
+  //requestEnable("hin");
 }
 
 void Language::allocateResources(){
@@ -48,6 +48,24 @@ void Language::requestEnable(QString lang){
       enableLanguage(lang);
       break;
     }
+  }
+}
+
+void Language::disableLanguage(QString lang){
+  int lim, i, x;
+  lim = enabledLanguages.length();
+  x = -1;
+
+  if(checkEnabled(lang)){
+
+    for(i = 0; i < lim; i++){
+      if(lang == enabledLanguages[i]){
+        x = i;
+        break;
+      }
+    }
+
+    if(x > -1) enabledLanguages.remove(x, 1);
   }
 }
 

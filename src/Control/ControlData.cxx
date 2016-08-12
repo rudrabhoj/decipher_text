@@ -40,3 +40,7 @@ EventManager* ControlData::getPubSub(){
 ProjectManager* ControlData::getProjectManager(){
   return myProject;
 }
+
+Language* ControlData::getLanguage(){
+  return language;
+}

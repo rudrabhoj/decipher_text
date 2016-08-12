@@ -25,6 +25,7 @@ public:
   Setting *getSetting();
   EventManager *getPubSub();
   ProjectManager *getProjectManager();
+  Language *getLanguage();
 };
 
 #endif
