@@ -28,6 +28,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 
   configureMenu();
 
+  configureSettingWindow();
+
   configureConnections();
 
   configureToolbar();
@@ -144,6 +146,10 @@ void MainWindow::configureAction(){
   documentation->setIconVisibleInMenu(false);
 }
 
+void MainWindow::configureSettingWindow(){
+  settingWindow = new SettingDialog(this, localControl);
+}
+
 void MainWindow::configureConnections(){
   configureMenuConnections();
   configureWidgetConnections();  
@@ -155,6 +161,7 @@ void MainWindow::configureMenuConnections(){
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
   connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
+  connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
 }
 
 void MainWindow::configureWidgetConnections(){

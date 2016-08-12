@@ -16,6 +16,7 @@
 #include <QIcon>
 
 #include <Interface/Canvas.hh>
+#include <Interface/SettingDialog.hh>
 
 
 #include <Control/ControlData.hh>
@@ -39,6 +40,8 @@ private:
   QSplitter *mainSplitters;
 
   QTextEdit *editor;
+
+  SettingDialog *settingWindow;
 
   QAction *newProject;
   QAction *openProject;
@@ -68,6 +71,7 @@ private:
   void configureLayout();
   void configureAction();
   void configureConnections();
+  void configureSettingWindow();
   void configureMenuConnections();
   void configureWidgetConnections();
   void configureMenu();
