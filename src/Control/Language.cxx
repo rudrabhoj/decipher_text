@@ -7,7 +7,7 @@ Language::Language(){
   searchLanguages();
 
   //tmp demo code
-  //requestEnable("eng");
+  requestEnable("eng");
   //requestEnable("hin");
 }
 

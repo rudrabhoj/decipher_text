@@ -161,6 +161,7 @@ void MainWindow::configureLanguageActions(){
   for(i = 0; i < lim; i++){
     lang = new QAction(allLanguages[i]);
     lang->setCheckable(true);
+    if (allLanguages[i] == "eng") lang->setChecked(true);
     languageActions.push_back(lang);
   }
 }
