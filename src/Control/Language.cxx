@@ -95,7 +95,7 @@ QString Language::getLanguageArgument(){
 
   if (enabledLanguages.isEmpty()) return "";
 
-  arg = "-l " + enabledLanguages[0];
+  arg = enabledLanguages[0];
 
   for (i = 1; i < lim; i++){
     arg = arg + "+" + enabledLanguages[i];

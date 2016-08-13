@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QVector>
+#include <Document/wordUnit.hh>
 //#include <QFileInfo>
 
 class Page{
@@ -13,21 +14,20 @@ public:
   QString getText();
   void appendWord(QString data, int x1, int y1, int x2, int y2);
 
+  void importOcr(QVector<wordUnit> ocrImport);
+
   void setFileName(QString fname);
   QString getFullDisplayLink();
   QString getThumbLink();
 
-private:
-  struct wordUnit{
-    QString data;
-    int x1;
-    int y1;
-    int x2;
-    int y2;
-  };
+  bool getOcrStatus();
+  void setOcrStatus(bool staat);
 
+private:
   int displayHead;
   int index;
+  bool ocrStatus;
+
   QString dataX;
   QString projectRoot;
   QString imageRoot;

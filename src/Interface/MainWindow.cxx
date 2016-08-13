@@ -32,6 +32,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 
   configureSettingWindow();
 
+  configureRProcessDialog();
+
   configureConnections();
 
   configureToolbar();
@@ -167,6 +169,10 @@ void MainWindow::configureSettingWindow(){
   settingWindow = new SettingDialog(this, localControl);
 }
 
+void MainWindow::configureRProcessDialog(){
+  rProcessDialog = new RecognizeProcess(this, localControl);
+}
+
 void MainWindow::configureConnections(){
   configureMenuConnections();
   configureWidgetConnections();  
@@ -178,7 +184,9 @@ void MainWindow::configureMenuConnections(){
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
   connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
+
   connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
+  connect(orcNow, &QAction::triggered, this, &MainWindow::handleRecognizeNow);
 
   configureLanguageConnections();
 }
@@ -194,6 +202,16 @@ void MainWindow::configureLanguageConnections(){
 
 void MainWindow::configureWidgetConnections(){
   connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
+}
+
+void MainWindow::handleRecognizeNow(){
+  int i;
+  i = pageList->currentRow();
+
+  if (i > -1){
+    rProcessDialog->recognizeNow(getFullPage(pageList->currentRow()), pageList->currentRow());
+    loadOCRedText();
+  }
 }
 
 void MainWindow::handleLanguageChange(){
@@ -298,7 +316,10 @@ void MainWindow::testMessagePrint(){
   int i;
   i = pageList->currentRow();
 
-  if (i >= 0) canvasObject->drawPage(getFullPage(i));
+  if (i >= 0){
+    canvasObject->drawPage(getFullPage(i));
+    loadOCRedText();
+  }
 }
 
 
@@ -319,6 +340,22 @@ void MainWindow::sendEnableLangRequest(QString lang){
 
 void MainWindow::sendDisableLangRequest(QString lang){
   localControl->getLanguage()->disableLanguage(lang);
+}
+
+void MainWindow::loadOCRedText(){
+
+  QList<Page>* localPages;
+  int currentPage;
+
+  localPages = getPageLink();
+  currentPage = pageList->currentRow();
+
+  if ( (*localPages)[currentPage].getOcrStatus() ){
+    editor->clear();
+    editor->setText((*localPages)[currentPage].getText());
+  }else {
+    editor->clear();
+  }
 }
 
 //Secondary Dependence on Foreign Classes

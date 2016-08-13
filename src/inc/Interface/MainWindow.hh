@@ -20,6 +20,7 @@
 
 #include <Interface/Canvas.hh>
 #include <Interface/SettingDialog.hh>
+#include <Interface/RecognizeProcess.hh>
 
 
 #include <Control/ControlData.hh>
@@ -49,6 +50,7 @@ private:
   QTextEdit *editor;
 
   SettingDialog *settingWindow;
+  RecognizeProcess *rProcessDialog;
 
   QAction *newProject;
   QAction *openProject;
@@ -83,11 +85,13 @@ private:
   void configureConnections();
   void configureLanguageConnections();
   void configureSettingWindow();
+  void configureRProcessDialog();
   void configureMenuConnections();
   void configureWidgetConnections();
   void configureMenu();
   void configureToolbar();
 
+  void handleRecognizeNow();
   void handleLanguageChange();
 
   void handleOpenProject();
@@ -100,6 +104,7 @@ private:
 
   //Foreign Dependenices
   std::function<void()> pageUpdateWrapper;
+  void loadOCRedText();
   
   void syncNavbar();
   void setSignalWrappers();

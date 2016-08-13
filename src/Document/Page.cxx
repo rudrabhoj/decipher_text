@@ -4,6 +4,8 @@ Page::Page(QString prjRoot, int pgIndex){
   projectRoot = prjRoot;
   index = pgIndex;
 
+  setOcrStatus(false);
+
   setImagePaths();
 }
 
@@ -41,7 +43,17 @@ void Page::setRefinedDisplay(){
 }
 
 QString Page::getText(){
-  return "Tmp String"; //Need to integrate with libtesseract first
+  int i, lim;
+  QString out;
+
+  lim = content.length();
+
+  for(i = 0; i < lim; i++){
+    out += content[i].data;
+    out += " ";
+  }
+
+  return out;
 }
 
 void Page::appendWord(QString data, int x1, int y1, int x2, int y2){
@@ -63,4 +75,17 @@ void Page::createText(){
   dataX = "";
 
   for (i = 0; i < lim; i++) dataX += content[i].data;
+}
+
+void Page::setOcrStatus(bool staat){
+  ocrStatus = staat;
+}
+
+bool Page::getOcrStatus(){
+  return ocrStatus;
+}
+
+void Page::importOcr(QVector<wordUnit> ocrImport){
+  this->content = ocrImport;
+  setOcrStatus(true);
 }

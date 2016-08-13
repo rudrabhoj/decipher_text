@@ -45,6 +45,7 @@ List of Messages:
 1. pagesChanged : When there is change in number and/or order of pages. Or content.
                   It should be clear changes are made always in Document.ProjectManager, not GUI!
                   GUI just sync itself.
+2. ocrProcessed : When a new page is OCRed.
 
 
 

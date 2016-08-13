@@ -17,13 +17,17 @@ SOURCES += src/Control/ControlData.cxx
 SOURCES += src/Control/Setting.cxx
 SOURCES += src/Control/Language.cxx
 SOURCES += src/Control/EventManager.cxx
+SOURCES += src/Control/TesseractRecognize.cxx
 SOURCES += src/Document/Page.cxx
 SOURCES += src/Document/ProjectManager.cxx
 SOURCES += src/Interface/MainWindow.cxx
 SOURCES += src/Interface/Canvas.cxx
 SOURCES += src/Interface/SettingDialog.cxx
+SOURCES += src/Interface/RecognizeProcess.cxx
 
 #Link
+LIBS += -llept
+LIBS += -ltesseract
 
 QT += widgets
 QT += core
