@@ -19,6 +19,8 @@ private:
   int windowYPos;
   int windowWidth;
   int windowHeight;
+  QString fontFamily;
+  double fontSize;
 
   //Resource paths
   QString binRoot;
@@ -33,7 +35,7 @@ private:
   void setLanguageDefaults();
   void setInterfaceDefaults();
   void setResourceDefaults();
-
+  
   bool configExists();
   QString getConfigDir();
   QString getConfigFile();
@@ -57,6 +59,9 @@ public:
   int getWindowWidth();
   int getWindowHeight();
 
+  QString getFontFamily();
+  double getFontSize();
+
   QString getDecipherDataPath();
   QString getIconDir();
 
@@ -72,6 +77,9 @@ public:
   void setWindowYPos(int pos);
   void setWindowWidth(int width);
   void setWindowHeight(int height);
+
+  void setFontFamily(QString family);
+  void setFontSize(double sz);
 
   void setDecipherDataPath(QString path);
   void setIconDir(QString path);

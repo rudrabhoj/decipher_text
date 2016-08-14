@@ -91,6 +91,8 @@ private:
   void configureMenu();
   void configureToolbar();
 
+  QString defaultOCRLanguage();
+  void editorFontSetting();
   void handleRecognizeNow();
   void handleLanguageChange();
 
@@ -112,6 +114,8 @@ private:
   void sendDisableLangRequest(QString lang);
 
   void loadLanguages();
+  QString getConfigFontFamily();
+  double getConfigFontSize();
 
   QList<Page> *getPageLink();
   QString getThumbnailPage(int index);

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFont>
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
@@ -11,6 +12,8 @@
 
 
 Setting::Setting(){
+  setDefaults();
+
   if (!configExists()) newConfigFile();
 
   setDefaults();
@@ -136,8 +139,12 @@ void Setting::interpretConfig(QString textToPrint){
     setAppName(argument);
   }else if(cmmd == "interfaceLanguage"){
     setInterfaceLanguage(argument);
+  }else if(cmmd == "fontFamily"){
+    setFontFamily(argument);
   }else if(cmmd == "windowState"){
     setWindowState(argument.toInt());
+  }else if(cmmd == "fontSize"){
+    setFontSize(argument.toDouble());
   }else if(cmmd == "windowXPos"){
     setWindowXPos(argument.toInt());
   }else if(cmmd == "windowYPos"){
@@ -175,6 +182,8 @@ QString Setting::getCurrentState(){
   state += "\ntessdataPath: "        + getTessdataPath();
   state += "\nappName: "             + getAppName();
   state += "\ninterfaceLanguage: "   + getInterfaceLanguage();
+  state += "\nfontFamily: "          + getFontFamily();
+  state += "\nfontSize: "            + QString::number(getFontSize());
   state += "\nwindowState: "         + QString::number(getWindowState());
   state += "\nwindowXPos: "          + QString::number(getWindowXPos());
   state += "\nwindowYPos: "          + QString::number(getWindowYPos());
@@ -200,6 +209,8 @@ void Setting::setInterfaceDefaults(){
   windowYPos = 1;
   windowWidth = 1280;
   windowHeight = 720;
+  fontFamily = "NaN";
+  fontSize = 16.0;
 }
 
 void Setting::setResourceDefaults(){
@@ -301,6 +312,14 @@ int Setting::getWindowHeight(){
   return windowHeight;
 }
 
+QString Setting::getFontFamily(){
+  return fontFamily;
+}
+
+double Setting::getFontSize(){
+  return fontSize;
+}
+
 QString Setting::getDecipherDataPath(){
   return decipherDataPath;
 }
@@ -345,6 +364,14 @@ void Setting::setWindowWidth(int width){
 
 void Setting::setWindowHeight(int height){
   windowHeight = height;
+}
+
+void Setting::setFontFamily(QString family){
+  fontFamily = family;
+}
+
+void Setting::setFontSize(double sz){
+  fontSize = sz;
 }
 
 void Setting::setDecipherDataPath(QString path){

@@ -65,6 +65,7 @@ void MainWindow::configureCanvas(){
 
 void MainWindow::configureEditor(){
   editor->setParent(centralWidget);
+  editorFontSetting();
 }
 
 void MainWindow::configureSplitters(){
@@ -161,7 +162,7 @@ void MainWindow::configureLanguageActions(){
   for(i = 0; i < lim; i++){
     lang = new QAction(allLanguages[i]);
     lang->setCheckable(true);
-    if (allLanguages[i] == "eng") lang->setChecked(true);
+    if (allLanguages[i] == defaultOCRLanguage()) lang->setChecked(true);
     languageActions.push_back(lang);
   }
 }
@@ -204,6 +205,16 @@ void MainWindow::configureLanguageConnections(){
 void MainWindow::configureWidgetConnections(){
   connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
 }
+
+void MainWindow::editorFontSetting(){
+  if (getConfigFontFamily() != "NaN"){
+    editor->setFontFamily(getConfigFontFamily());
+  }
+
+  editor->setFontPointSize(getConfigFontSize());
+}
+
+ 
 
 void MainWindow::handleRecognizeNow(){
   int i;
@@ -330,6 +341,14 @@ QList<Page>* MainWindow::getPageLink(){
   return localControl->getProjectManager()->emitPages();
 }
 
+QString MainWindow::getConfigFontFamily(){
+  return localControl->getSetting()->getFontFamily();
+}
+
+double MainWindow::getConfigFontSize(){
+  return localControl->getSetting()->getFontSize();
+}
+
 void MainWindow::loadLanguages(){
   allLanguages = localControl->getLanguage()->getAll();
   enabledLanguages = localControl->getLanguage()->getEnabled();
@@ -353,8 +372,10 @@ void MainWindow::loadOCRedText(){
 
   if ( (*localPages)[currentPage].getOcrStatus() ){
     editor->clear();
+    editorFontSetting();
     editor->setText((*localPages)[currentPage].getText());
   }else {
+    editorFontSetting();
     editor->clear();
   }
 }
@@ -399,4 +420,8 @@ void MainWindow::setSignalWrappers(){
   pageUpdateWrapper = [&](){syncNavbar();};
 
   localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
+}
+
+QString MainWindow::defaultOCRLanguage(){
+  return "eng";
 }
