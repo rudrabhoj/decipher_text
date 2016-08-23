@@ -45,7 +45,7 @@ void RecognizeProcess::configureLayout(){
 }
 
 void RecognizeProcess::displayDialog(){
-  tessRecog = new TesseractRecognize(localControl);
+  //tessRecog = new TesseractRecognize(localControl);
 
   show();
 }
@@ -57,7 +57,7 @@ void RecognizeProcess::recognizeNow(QString pageLink, int pageIndex){
 }
 
 void RecognizeProcess::closeDialog(){
-  delete tessRecog;
+  //delete tessRecog;
 
   accept();
 }
@@ -66,7 +66,8 @@ void RecognizeProcess::closeDialog(){
 //Primary Foreign Dependents
 
 void RecognizeProcess::implementOcr(QString pageLink, int pageIndex){
-  tessRecog->recognize(pageLink, pageIndex);
+  TesseractRecognize recognizeDaemon(localControl);
+  recognizeDaemon.recognize(pageLink, pageIndex);
 }
 
 void RecognizeProcess::configureConnections(){

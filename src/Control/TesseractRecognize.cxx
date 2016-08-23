@@ -17,18 +17,29 @@ void TesseractRecognize::recognize(QString pageLink, int pageIndex){
 void TesseractRecognize::doRecognize(QString page){
   Pix *inputImage;
   char *word;
+  char languageArg[425];
   int x1, y1, x2, y2;
   tesseract::TessBaseAPI process;
   tesseract::ResultIterator *voyager;
   tesseract::PageIteratorLevel wordLevel;
+  
+  /* Would be helpful to actually delete the dynamically allocated
+   * string we get from getLanguageSettings,
+   * but horrible errors I got while convertng QString to char *
+   * safely, would want me to look at it later.
+   * few bytes a session would leak otherwise.
+   */
+  strcpy(languageArg, getLanguageSettings());
 
   inputImage = pixRead(page.toUtf8().data());
 
   if (inputImage == 0){
     //Implement error handling
   }
+  
+  std::cout << "Buffer at function = " << languageArg << std::endl;
 
-  if (process.Init("/usr/local/share/tessdata", getLanguageSettings() )){
+  if (process.Init("/usr/local/share/tessdata", languageArg )){
     //Again, handle error here
   }
 
@@ -101,15 +112,22 @@ void TesseractRecognize::appendWord(char* inputWord, int a, int b, int c, int d)
 }
 */
 
+
 //Primary Foreign Dependents
 QList<Page>* TesseractRecognize::getStoredPages(){
   return localControl->getProjectManager()->emitPages();
 }
 
 char* TesseractRecognize::getLanguageSettings(){
+  char *buffer;
+  
   QString lang = localControl->getLanguage()->getLanguageArgument();
+  buffer = new char[lang.length() + 8]; //extra space for safety. Remove if you want.
   QByteArray array = lang.toLocal8Bit();
-  char *buffer = array.data();
+  strcpy(buffer, array.data());
+  
+  std::cout << "Buffer at origin = " << buffer << std::endl;
+  
   return buffer;
 }
 

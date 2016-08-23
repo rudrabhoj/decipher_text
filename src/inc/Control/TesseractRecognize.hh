@@ -25,10 +25,11 @@ private:
   void appendWord(char* inputWord, int a, int b, int c, int d);
 
   void pushToPage();
-  QList<Page> *getStoredPages();
   void sendDoneMessge();
+ 
 
   //Foreign Dependents
+  QList<Page> *getStoredPages();
   char* getLanguageSettings();
 };
 
