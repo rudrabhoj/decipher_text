@@ -7,7 +7,7 @@
 #include <QVBoxLayout>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QTextEdit>
+#include <Interface/TextEditor.hh>
 #include <QSplitter>
 #include <QList>
 #include <QMenu>
@@ -47,7 +47,7 @@ private:
 
   QSplitter *mainSplitters;
 
-  QTextEdit *editor;
+  TextEditor *editor;
 
   SettingDialog *settingWindow;
   RecognizeProcess *rProcessDialog;
@@ -62,6 +62,7 @@ private:
   QAction *zoomOut;
   QAction *zoomNormal;
   QAction *orcNow;
+  QAction *fontSettings;
   QAction *prefSettings;
   QAction *about;
   QAction *documentation;
@@ -92,7 +93,6 @@ private:
   void configureToolbar();
 
   QString defaultOCRLanguage();
-  void editorFontSetting();
   void handleRecognizeNow();
   void handleLanguageChange();
 
@@ -114,13 +114,13 @@ private:
   void sendDisableLangRequest(QString lang);
 
   void loadLanguages();
-  QString getConfigFontFamily();
-  double getConfigFontSize();
 
   QList<Page> *getPageLink();
   QString getThumbnailPage(int index);
   QString getFullPage(int index);
   int getTotalPages();
+  
+  void setFontPreferences();
 };
 
 #endif

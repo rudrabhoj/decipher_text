@@ -22,6 +22,7 @@ SOURCES += src/Document/Page.cxx
 SOURCES += src/Document/ProjectManager.cxx
 SOURCES += src/Interface/MainWindow.cxx
 SOURCES += src/Interface/Canvas.cxx
+SOURCES += src/Interface/TextEditor.cxx
 SOURCES += src/Interface/SettingDialog.cxx
 SOURCES += src/Interface/RecognizeProcess.cxx
 

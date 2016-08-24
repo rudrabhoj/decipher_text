@@ -76,7 +76,7 @@ void ProjectManager::addSinglePage(QString page){
 
   commandExe = "convert ";
   commandExe += "\"" + imagesFull + "/" + ofName + "\"";
-  commandExe += " -resize 104x148\\! ";
+  commandExe += " -thumbnail 104x148\\! ";
   commandExe += "\"" + imagesThumb + "/" + ofName + "\"";
 
   system(commandExe.toUtf8().data());

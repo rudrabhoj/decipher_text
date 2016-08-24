@@ -3,6 +3,7 @@
 #include <QStringList>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QFontDialog>
 #include <Document/Page.hh>
 
 MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow(parent){
@@ -48,8 +49,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 void MainWindow::allocateResources(){
   pageList = new QListWidget();
   mainLayout = new QHBoxLayout();
-  canvasObject = new Canvas(0, localControl);
-  editor = new QTextEdit();
+  canvasObject = new Canvas(this, localControl);
+  editor = new TextEditor(this, localControl);
   mainSplitters = new QSplitter();
 }
 
@@ -65,7 +66,7 @@ void MainWindow::configureCanvas(){
 
 void MainWindow::configureEditor(){
   editor->setParent(centralWidget);
-  editorFontSetting();
+  editor->editorFontSetting();
 }
 
 void MainWindow::configureSplitters(){
@@ -96,6 +97,7 @@ void MainWindow::configureAction(){
   QString zoomInString = "&Zoom In";
   QString zoomOutString = "&Zoom Out";
   QString zoomNormalString = "&Zoom Normal";
+  QString fontSettingsString = "&Font Preferences";
   QString orcNowString = "&OCR";
   QString prefSettingsString = "&Settings";
   QString aboutString = "&About";
@@ -140,6 +142,9 @@ void MainWindow::configureAction(){
 
   orcNow = new QAction(QIcon(ocrNowPix), orcNowString);
   orcNow->setIconVisibleInMenu(false);
+  
+  fontSettings = new QAction(fontSettingsString);
+  fontSettings->setIconVisibleInMenu(false);
 
   prefSettings = new QAction(QIcon(settingPix), prefSettingsString);
   prefSettings->setIconVisibleInMenu(false);
@@ -186,6 +191,8 @@ void MainWindow::configureMenuConnections(){
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
   connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
+  
+  connect(fontSettings, &QAction::triggered, this, &MainWindow::setFontPreferences);
 
   connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
   connect(orcNow, &QAction::triggered, this, &MainWindow::handleRecognizeNow);
@@ -205,15 +212,6 @@ void MainWindow::configureLanguageConnections(){
 void MainWindow::configureWidgetConnections(){
   connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
 }
-
-void MainWindow::editorFontSetting(){
-  if (getConfigFontFamily() != "NaN"){
-    editor->setFontFamily(getConfigFontFamily());
-  }
-
-  editor->setFontPointSize(getConfigFontSize());
-}
-
  
 
 void MainWindow::handleRecognizeNow(){
@@ -280,6 +278,7 @@ void MainWindow::configureMenu(){
 
   tools = this->menuBar()->addMenu(toolsString);
   tools->addAction(orcNow);
+  tools->addAction(fontSettings);
   tools->addAction(prefSettings);
 
   configureLanguageMenu();
@@ -341,13 +340,6 @@ QList<Page>* MainWindow::getPageLink(){
   return localControl->getProjectManager()->emitPages();
 }
 
-QString MainWindow::getConfigFontFamily(){
-  return localControl->getSetting()->getFontFamily();
-}
-
-double MainWindow::getConfigFontSize(){
-  return localControl->getSetting()->getFontSize();
-}
 
 void MainWindow::loadLanguages(){
   allLanguages = localControl->getLanguage()->getAll();
@@ -372,11 +364,34 @@ void MainWindow::loadOCRedText(){
 
   if ( (*localPages)[currentPage].getOcrStatus() ){
     editor->clear();
-    editorFontSetting();
+    editor->editorFontSetting();
     editor->setText((*localPages)[currentPage].getText());
   }else {
-    editorFontSetting();
+    editor->editorFontSetting();
     editor->clear();
+  }
+}
+
+void MainWindow::setFontPreferences(){
+  bool selectionStatus;
+  QString family;
+  double fntSize;
+  
+  QFont newFont = QFontDialog::getFont(&selectionStatus, editor->currentFont(), this);
+  
+  if(selectionStatus){
+    family = newFont.family();
+    fntSize = newFont.pointSize();
+    
+    localControl->getSetting()->setFontFamily(family); //foreign dep
+    localControl->getSetting()->setFontSize(fntSize); //foreign dep
+    
+    localControl->getSetting()->editConfigFile("fontFamily", family);
+    localControl->getSetting()->editConfigFile("fontSize", QString::number(fntSize));
+    
+    editor->setCurrentFont(newFont);
+  } else {
+    std::cout << "Nothing selected!" << std::endl;
   }
 }
 
