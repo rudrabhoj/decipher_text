@@ -2,9 +2,11 @@
 #define __INTERFACE_TEXTEDITOR_HH__
 
 #include <Control/ControlData.hh>
+#include <Document/Page.hh>
+
 #include <QMainWindow>
 #include <QTextEdit>
-
+#include <QList>
 
 class TextEditor : public QTextEdit{
 public:
@@ -13,11 +15,16 @@ public:
 
 private:
   ControlData *localControl;
+  QList<Page> *pagesData;
+  
   void enableFontFamily();
+  void configureConnections();
+  void cursorMoved();
   
   //Foreign dependents
   QString getConfigFontFamily();
   double getConfigFontSize();
+  void syncCurrentWord(int lineNo, int pos);
     
 };
 

@@ -210,7 +210,7 @@ void MainWindow::configureLanguageConnections(){
 }
 
 void MainWindow::configureWidgetConnections(){
-  connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::testMessagePrint);
+  connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::listItemChanged);
 }
  
 
@@ -323,9 +323,11 @@ void MainWindow::configureToolbar(){
 }
 
 
-void MainWindow::testMessagePrint(){
+void MainWindow::listItemChanged(){
   int i;
   i = pageList->currentRow();
+  
+  syncProjectManagerPageSelection(i);
 
   if (i >= 0){
     canvasObject->drawPage(getFullPage(i));
@@ -338,6 +340,10 @@ void MainWindow::testMessagePrint(){
 //Primary Dependence on Foreign Classes
 QList<Page>* MainWindow::getPageLink(){
   return localControl->getProjectManager()->emitPages();
+}
+
+void MainWindow::syncProjectManagerPageSelection(int i){
+  localControl->getProjectManager()->setCurrentPage(i);
 }
 
 

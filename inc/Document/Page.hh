@@ -19,9 +19,12 @@ public:
   void setFileName(QString fname);
   QString getFullDisplayLink();
   QString getThumbLink();
+  void interpretCurrentWord(int line, int pos);
 
   bool getOcrStatus();
   void setOcrStatus(bool staat);
+
+  wordUnit currentWord;
 
 private:
   int displayHead;
@@ -44,6 +47,9 @@ private:
   void setImagePaths();
   void createText();
   void setDisplayHead(int dHead);
+
+  void defaultCurrentWord();
+  QList<wordUnit> getLine(int line);
 
   void createThumbnail(); //Unimplemented until Imagemagick integration
   void createRefined(); //Unimplemented until Imagemagick integration

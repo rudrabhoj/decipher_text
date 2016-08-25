@@ -20,13 +20,23 @@ private:
   int pageNumber;
   QVector<wordUnit> wordList;
 
+  int localLine;
+  int localWord;
+
+  int getLocalLine();
+  int getLocalWord();
+  void nextLine();
+  void nextWord();
+  void resetWord();
+  void resetLine();
+
   void doRecognize(QString page);
   void pushNewLine();
   void appendWord(char* inputWord, int a, int b, int c, int d);
 
   void pushToPage();
   void sendDoneMessge();
- 
+
 
   //Foreign Dependents
   QList<Page> *getStoredPages();

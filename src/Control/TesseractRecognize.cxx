@@ -22,7 +22,10 @@ void TesseractRecognize::doRecognize(QString page){
   tesseract::TessBaseAPI process;
   tesseract::ResultIterator *voyager;
   tesseract::PageIteratorLevel wordLevel;
-  
+
+  resetWord();
+  resetLine();
+
   /* Would be helpful to actually delete the dynamically allocated
    * string we get from getLanguageSettings,
    * but horrible errors I got while convertng QString to char *
@@ -36,7 +39,7 @@ void TesseractRecognize::doRecognize(QString page){
   if (inputImage == 0){
     //Implement error handling
   }
-  
+
   std::cout << "Buffer at function = " << languageArg << std::endl;
 
   if (process.Init("/usr/local/share/tessdata", languageArg )){
@@ -73,7 +76,35 @@ void TesseractRecognize::doRecognize(QString page){
 
   pushToPage();
 
+  resetWord();
+  resetLine();
+
   sendDoneMessge();
+}
+
+
+
+int TesseractRecognize::getLocalLine(){
+  return localLine;
+}
+
+int TesseractRecognize::getLocalWord(){
+  return localWord;
+}
+void TesseractRecognize::nextLine(){
+  localLine += 1;
+}
+
+void TesseractRecognize::nextWord(){
+  localWord += 1;
+}
+
+void TesseractRecognize::resetWord(){
+  localWord = 0;
+}
+
+void TesseractRecognize::resetLine(){
+  localLine = 0;
 }
 
 void TesseractRecognize::pushNewLine(){
@@ -84,6 +115,7 @@ void TesseractRecognize::pushNewLine(){
   tmpUnit.y1 = 0;
   tmpUnit.x2 = 0;
   tmpUnit.y2 = 0;
+  tmpUnit.newLine = true;
 
   wordList.push_back(tmpUnit);
 }
@@ -120,14 +152,14 @@ QList<Page>* TesseractRecognize::getStoredPages(){
 
 char* TesseractRecognize::getLanguageSettings(){
   char *buffer;
-  
+
   QString lang = localControl->getLanguage()->getLanguageArgument();
   buffer = new char[lang.length() + 8]; //extra space for safety. Remove if you want.
   QByteArray array = lang.toLocal8Bit();
   strcpy(buffer, array.data());
-  
+
   std::cout << "Buffer at origin = " << buffer << std::endl;
-  
+
   return buffer;
 }
 

@@ -17,6 +17,8 @@ ProjectManager::ProjectManager(QString projDirName){
   createEmptyProject();
 
   setSaveState(true);
+  
+  setCurrentPageDefault();
 
   /*
   QStringList myPages;
@@ -41,6 +43,18 @@ void ProjectManager::verifyProjectRoot(){
 
 QList<Page>* ProjectManager::emitPages(){
   return &pageList;
+}
+
+void ProjectManager::setCurrentPage(int pgIndex){
+  currentPage = pgIndex;
+}
+
+int ProjectManager::getCurrentPage(){
+  return currentPage;
+}
+
+void ProjectManager::setCurrentPageDefault(){
+  setCurrentPage(-1);
 }
 
 void ProjectManager::addPages(QStringList pages){

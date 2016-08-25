@@ -101,7 +101,7 @@ private:
 
   void showLoadDialog();
 
-  void testMessagePrint();
+  void listItemChanged();
 
 
   //Foreign Dependenices
@@ -114,6 +114,7 @@ private:
   void sendDisableLangRequest(QString lang);
 
   void loadLanguages();
+  void syncProjectManagerPageSelection(int i);
 
   QList<Page> *getPageLink();
   QString getThumbnailPage(int index);

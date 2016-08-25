@@ -4,7 +4,7 @@
 
 TEMPLATE = app
 TARGET = decipher_text
-INCLUDEPATH += src/inc
+INCLUDEPATH += inc
 
 #DIRS
 DESTDIR=bin
