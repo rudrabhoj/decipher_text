@@ -50,6 +50,7 @@ private:
 
   void defaultCurrentWord();
   QList<wordUnit> getLine(int line);
+  wordUnit convertWord(QList<wordUnit> myLine, int position);
 
   void createThumbnail(); //Unimplemented until Imagemagick integration
   void createRefined(); //Unimplemented until Imagemagick integration

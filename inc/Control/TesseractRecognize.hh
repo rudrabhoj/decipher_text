@@ -32,7 +32,7 @@ private:
 
   void doRecognize(QString page);
   void pushNewLine();
-  void appendWord(char* inputWord, int a, int b, int c, int d);
+  void appendWord(char* inputWord, int a, int b, int c, int d, int lineNo, int wordNo);
 
   void pushToPage();
   void sendDoneMessge();

@@ -60,8 +60,9 @@ void TesseractRecognize::doRecognize(QString page){
 
       voyager->BoundingBox(wordLevel, &x1, &y1, &x2, &y2);
 
-      appendWord(word, x1, y1, x2, y2);
+      appendWord(word, x1, y1, x2, y2, getLocalLine(), getLocalWord());
 
+      nextWord();
       delete []word;
 
     } while(voyager->Next(wordLevel));
@@ -93,6 +94,7 @@ int TesseractRecognize::getLocalWord(){
 }
 void TesseractRecognize::nextLine(){
   localLine += 1;
+  resetWord();
 }
 
 void TesseractRecognize::nextWord(){
@@ -117,11 +119,13 @@ void TesseractRecognize::pushNewLine(){
   tmpUnit.y2 = 0;
   tmpUnit.newLine = true;
 
+  nextLine();
+
   wordList.push_back(tmpUnit);
 }
 
 
-void TesseractRecognize::appendWord(char* inputWord, int a, int b, int c, int d){
+void TesseractRecognize::appendWord(char* inputWord, int a, int b, int c, int d, int lineNo, int wordNo){
   wordUnit tmpUnit;
 
   tmpUnit.data = inputWord;
@@ -129,6 +133,9 @@ void TesseractRecognize::appendWord(char* inputWord, int a, int b, int c, int d)
   tmpUnit.y1 = b;
   tmpUnit.x2 = c;
   tmpUnit.y2 = d;
+
+  tmpUnit.lineNo = lineNo;
+  tmpUnit.wordNo = wordNo;
 
   wordList.push_back(tmpUnit);
 }

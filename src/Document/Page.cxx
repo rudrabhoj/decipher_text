@@ -8,7 +8,7 @@ Page::Page(QString prjRoot, int pgIndex){
   setOcrStatus(false);
 
   setImagePaths();
-  
+
   defaultCurrentWord();
 }
 
@@ -69,44 +69,49 @@ QString Page::getText(){
 
 void Page::interpretCurrentWord(int line, int pos){
   QList<wordUnit> myLine;
-  
-  myLine = getLine(pos);
-  
-  std::cout << "Line: " << line << " Pos: " << pos << std::endl;
-  if (myLine.length() > 0){
-    int x;
-    for(x = 0; x < myLine.length(); x++){
-      std::cout << " " << myLine[x].data.toUtf8().data();
-    }
-    std::cout << std::endl;
+
+  myLine = getLine(line);
+
+  std::cout << "Line: " << line << " Pos: " << pos << "Word: " << convertWord(myLine, pos).data.toUtf8().data() << std::endl;
+
+  currentWord = convertWord(myLine, pos);
+}
+
+wordUnit Page::convertWord(QList<wordUnit> myLine, int position){
+
+  int size, lim, i;
+
+  lim = myLine.length();
+  size = 0;
+
+  for(i = 0; i < lim; i++){
+    size += (myLine[i].data.length() + 1);
+    if (size > position) return myLine[i];
   }
+
 }
 
 QList<wordUnit> Page::getLine(int line){
   int c, i, j, lim;
   QList<wordUnit> myLine;
   QString localData;
-  
+
   lim = content.length();
-  c = 0; //We draw two extra lines right now.
-  
-  for (i = 0; i < lim; i++){
-    localData = content[i].data;
-    
-    if(c == line){
-      myLine.push_back( content[i] );
-    }
-    
-    if (content[i].newLine){
-      c += 1;
-    }
-    
-    if (c > line){
+
+  for(i = 0; i < lim; i++){
+    if( content[i].lineNo <= line  ){
+
+      if(content[i].lineNo == line){
+        myLine.push_back(content[i]);
+      }
+
+    } else {
       break;
     }
   }
-  
+
   return myLine;
+
 }
 
 void Page::appendWord(QString data, int x1, int y1, int x2, int y2){
