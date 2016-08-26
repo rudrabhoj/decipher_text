@@ -68,7 +68,6 @@ QString Page::getText(){
 }
 
 void Page::interpretCurrentWord(int line, int pos){
-  std::cout << "Interpreting Line..." << std::endl;
   QList<wordUnit> myLine;
   wordUnit dummyWord;
 

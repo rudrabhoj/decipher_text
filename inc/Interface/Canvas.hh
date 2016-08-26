@@ -18,7 +18,7 @@ public:
   Canvas(QMainWindow *parent, ControlData *ctrlData);
   void configureSettings(QWidget *parent);
   void drawPage(QString pageToPrint);
-  void removeUnderline();
+  void removeHighlights();
   void zoomIn();
   void zoomOut();
   void zoomNormal();
@@ -36,6 +36,7 @@ private:
 
   void allocateResources();
   void allocateUnderline();
+  void removeUnderline();
   void configureUnderline();
   void configureParent(QWidget *parent);
   void configureController();

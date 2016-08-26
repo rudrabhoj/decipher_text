@@ -37,7 +37,7 @@ void Canvas::configureController(){
 void Canvas::drawPage(QString pageToPrint){
   scannedImg = new QPixmap(pageToPrint);
 
-  removeUnderline();
+  removeHighlights();
   displayController->clear();
   displayController->addPixmap((*scannedImg));
 }
@@ -67,7 +67,7 @@ void Canvas::zoomOut(){
 
 
 void Canvas::drawLine(){
-  removeUnderline();
+  removeHighlights();
 
   configureUnderline();
 }
@@ -78,13 +78,17 @@ void Canvas::removeUnderline(){
   }
 }
 
+void Canvas::removeHighlights(){
+  removeUnderline();
+}
+
 void Canvas::zoomNormal(){
   std::cout << "Unimplemented for now" << std::endl;
 }
 
 
 void Canvas::allocateUnderline(){
-  removeUnderline(); //Remove previous exisetence of underline
+  removeHighlights(); //Remove previous exisetence of underline
   underline = new QGraphicsLineItem();
 }
 
