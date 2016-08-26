@@ -37,6 +37,7 @@ void Canvas::configureController(){
 void Canvas::drawPage(QString pageToPrint){
   scannedImg = new QPixmap(pageToPrint);
 
+  removeUnderline();
   displayController->clear();
   displayController->addPixmap((*scannedImg));
 }
@@ -72,7 +73,7 @@ void Canvas::drawLine(){
 }
 
 void Canvas::removeUnderline(){
-  if (underline != NULL){
+  if (underline != NULL && underline->scene() != 0){
     displayController->removeItem(underline);
   }
 }
@@ -83,6 +84,7 @@ void Canvas::zoomNormal(){
 
 
 void Canvas::allocateUnderline(){
+  removeUnderline(); //Remove previous exisetence of underline
   underline = new QGraphicsLineItem();
 }
 

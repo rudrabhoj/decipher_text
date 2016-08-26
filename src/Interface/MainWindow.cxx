@@ -330,7 +330,6 @@ void MainWindow::listItemChanged(){
   syncProjectManagerPageSelection(i);
 
   if (i >= 0){
-    canvasObject->removeUnderline();
     canvasObject->drawPage(getFullPage(i));
     loadOCRedText();
   }
