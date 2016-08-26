@@ -1,4 +1,10 @@
 #include <Interface/Canvas.hh>
+#include <Document/Page.hh>
+
+
+#include <QPen>
+#include <QColor>
+#include <QList>
 #include <iostream>
 
 Canvas::Canvas(QMainWindow *parent, ControlData *ctrlData) : QGraphicsView(parent){
@@ -6,11 +12,13 @@ Canvas::Canvas(QMainWindow *parent, ControlData *ctrlData) : QGraphicsView(paren
   localControl = ctrlData;
   allocateResources();
   setZoomDefaults();
+  setupConnections();
 }
 
 void Canvas::allocateResources(){
   displayController = new QGraphicsScene();
   scannedImg = NULL;
+  underline = NULL;
 }
 
 void Canvas::configureSettings(QWidget *parent){
@@ -56,6 +64,87 @@ void Canvas::zoomOut(){
   scale(zoomOutFactor, zoomOutFactor);
 }
 
+
+void Canvas::drawLine(){
+  removeUnderline();
+
+  configureUnderline();
+}
+
+void Canvas::removeUnderline(){
+  if (underline != NULL){
+    displayController->removeItem(underline);
+  }
+}
+
 void Canvas::zoomNormal(){
   std::cout << "Unimplemented for now" << std::endl;
+}
+
+
+void Canvas::allocateUnderline(){
+  underline = new QGraphicsLineItem();
+}
+
+void Canvas::configureUnderline(){
+  QPen turtle;
+  int x1, x2, y2;
+
+  turtle.setColor(QColor(Qt::darkGreen));
+  turtle.setWidth(4);
+
+  allocateUnderline();
+
+  underline->setPen(turtle);
+
+  x1 = getLineX1();
+  x2 = getLineX2();
+  y2 = getLineY2();
+
+    underline->setLine(x1, y2, x2, y2);
+    displayController->addItem(underline);
+
+}
+
+//Foreign Dependents
+void Canvas::setupConnections(){
+  implementDraw = [&](){ drawLine(); };
+
+  localControl->getPubSub()->subscribe("drawLines", &implementDraw);
+}
+
+wordUnit Canvas::getCurrentWordUnit(){
+  int pgNo;
+  QList<Page> *pageBank;
+  Page *localPage;
+
+  pgNo = localControl->getProjectManager()->getCurrentPage();
+  pageBank = localControl->getProjectManager()->emitPages();
+  localPage = &((*pageBank)[pgNo]);
+
+  return localPage->currentWord;
+}
+
+int Canvas::getLineX1(){
+  wordUnit localWordUnit;
+
+  localWordUnit = getCurrentWordUnit();
+
+  return localWordUnit.x1;
+}
+
+int Canvas::getLineX2(){
+  wordUnit localWordUnit;
+
+  localWordUnit = getCurrentWordUnit();
+
+  return localWordUnit.x2;
+}
+
+int Canvas::getLineY2(){
+  wordUnit localWordUnit;
+
+  localWordUnit = getCurrentWordUnit();
+
+  return localWordUnit.y2;
 }

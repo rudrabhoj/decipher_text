@@ -16,16 +16,17 @@ public:
 private:
   ControlData *localControl;
   QList<Page> *pagesData;
-  
+
   void enableFontFamily();
   void configureConnections();
   void cursorMoved();
-  
+
   //Foreign dependents
   QString getConfigFontFamily();
   double getConfigFontSize();
   void syncCurrentWord(int lineNo, int pos);
-    
+  void sendDrawEvent();
+
 };
 
 #endif

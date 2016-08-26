@@ -142,7 +142,7 @@ void MainWindow::configureAction(){
 
   orcNow = new QAction(QIcon(ocrNowPix), orcNowString);
   orcNow->setIconVisibleInMenu(false);
-  
+
   fontSettings = new QAction(fontSettingsString);
   fontSettings->setIconVisibleInMenu(false);
 
@@ -182,7 +182,7 @@ void MainWindow::configureRProcessDialog(){
 
 void MainWindow::configureConnections(){
   configureMenuConnections();
-  configureWidgetConnections();  
+  configureWidgetConnections();
 }
 
 void MainWindow::configureMenuConnections(){
@@ -191,7 +191,7 @@ void MainWindow::configureMenuConnections(){
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
   connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
-  
+
   connect(fontSettings, &QAction::triggered, this, &MainWindow::setFontPreferences);
 
   connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
@@ -212,7 +212,7 @@ void MainWindow::configureLanguageConnections(){
 void MainWindow::configureWidgetConnections(){
   connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::listItemChanged);
 }
- 
+
 
 void MainWindow::handleRecognizeNow(){
   int i;
@@ -326,10 +326,11 @@ void MainWindow::configureToolbar(){
 void MainWindow::listItemChanged(){
   int i;
   i = pageList->currentRow();
-  
+
   syncProjectManagerPageSelection(i);
 
   if (i >= 0){
+    canvasObject->removeUnderline();
     canvasObject->drawPage(getFullPage(i));
     loadOCRedText();
   }
@@ -382,19 +383,19 @@ void MainWindow::setFontPreferences(){
   bool selectionStatus;
   QString family;
   double fntSize;
-  
+
   QFont newFont = QFontDialog::getFont(&selectionStatus, editor->currentFont(), this);
-  
+
   if(selectionStatus){
     family = newFont.family();
     fntSize = newFont.pointSize();
-    
+
     localControl->getSetting()->setFontFamily(family); //foreign dep
     localControl->getSetting()->setFontSize(fntSize); //foreign dep
-    
+
     localControl->getSetting()->editConfigFile("fontFamily", family);
     localControl->getSetting()->editConfigFile("fontSize", QString::number(fntSize));
-    
+
     editor->setCurrentFont(newFont);
   } else {
     std::cout << "Nothing selected!" << std::endl;

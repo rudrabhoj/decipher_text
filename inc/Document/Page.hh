@@ -51,9 +51,11 @@ private:
   void defaultCurrentWord();
   QList<wordUnit> getLine(int line);
   wordUnit convertWord(QList<wordUnit> myLine, int position);
+  wordUnit getDefaultDummyWord();
 
   void createThumbnail(); //Unimplemented until Imagemagick integration
   void createRefined(); //Unimplemented until Imagemagick integration
+
 };
 
 #endif

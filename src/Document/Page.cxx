@@ -68,17 +68,20 @@ QString Page::getText(){
 }
 
 void Page::interpretCurrentWord(int line, int pos){
+  std::cout << "Interpreting Line..." << std::endl;
   QList<wordUnit> myLine;
+  wordUnit dummyWord;
 
   myLine = getLine(line);
 
-  std::cout << "Line: " << line << " Pos: " << pos << "Word: " << convertWord(myLine, pos).data.toUtf8().data() << std::endl;
+  dummyWord = convertWord(myLine, pos);
 
-  currentWord = convertWord(myLine, pos);
+  if(!dummyWord.newLine){
+    currentWord = dummyWord;
+  }
 }
 
 wordUnit Page::convertWord(QList<wordUnit> myLine, int position){
-
   int size, lim, i;
 
   lim = myLine.length();
@@ -89,10 +92,23 @@ wordUnit Page::convertWord(QList<wordUnit> myLine, int position){
     if (size > position) return myLine[i];
   }
 
+  return getDefaultDummyWord(); //Return a dummy word if you aren't able to find a suitable word
+}
+
+wordUnit Page::getDefaultDummyWord(){
+  wordUnit dummy;
+  dummy.x1 = 1;
+  dummy.x2 = 1;
+  dummy.y1 = 1;
+  dummy.y2 = 1;
+  dummy.lineNo = 1;
+  dummy.wordNo = 1;
+
+  return dummy;
 }
 
 QList<wordUnit> Page::getLine(int line){
-  int c, i, j, lim;
+  int i, lim;
   QList<wordUnit> myLine;
   QString localData;
 
@@ -111,7 +127,6 @@ QList<wordUnit> Page::getLine(int line){
   }
 
   return myLine;
-
 }
 
 void Page::appendWord(QString data, int x1, int y1, int x2, int y2){
