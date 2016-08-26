@@ -92,6 +92,7 @@ void Canvas::allocateUnderline(){
   underline = new QGraphicsLineItem();
 }
 
+
 void Canvas::configureUnderline(){
   QPen turtle;
   int x1, x2, y2;
@@ -107,8 +108,8 @@ void Canvas::configureUnderline(){
   x2 = getLineX2();
   y2 = getLineY2();
 
-    underline->setLine(x1, y2, x2, y2);
-    displayController->addItem(underline);
+  underline->setLine(x1, y2, x2, y2);
+  displayController->addItem(underline);
 
 }
 
