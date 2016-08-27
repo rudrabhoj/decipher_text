@@ -47,7 +47,7 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 }
 
 void MainWindow::allocateResources(){
-  pageList = new QListWidget();
+  pageList = new PageNav(this, localControl);
   mainLayout = new QHBoxLayout();
   canvasObject = new Canvas(this, localControl);
   editor = new TextEditor(this, localControl);
@@ -56,8 +56,6 @@ void MainWindow::allocateResources(){
 
 void MainWindow::configurePageList(){
   pageList->setParent(centralWidget);
-  pageList->setViewMode(QListView::IconMode);
-  pageList->setIconSize(QSize(104, 148));
 }
 
 void MainWindow::configureCanvas(){

@@ -19,6 +19,7 @@
 #include <QString>
 
 #include <Interface/Canvas.hh>
+#include <Interface/PageNav.hh>
 #include <Interface/SettingDialog.hh>
 #include <Interface/RecognizeProcess.hh>
 
@@ -41,7 +42,7 @@ private:
   QHBoxLayout *mainLayout;
   QVBoxLayout *listLayout;
 
-  QListWidget *pageList;
+  PageNav *pageList;
 
   Canvas *canvasObject;
 
@@ -107,7 +108,7 @@ private:
   //Foreign Dependenices
   std::function<void()> pageUpdateWrapper;
   void loadOCRedText();
-  
+
   void syncNavbar();
   void setSignalWrappers();
   void sendEnableLangRequest(QString lang);
@@ -120,7 +121,7 @@ private:
   QString getThumbnailPage(int index);
   QString getFullPage(int index);
   int getTotalPages();
-  
+
   void setFontPreferences();
 };
 
