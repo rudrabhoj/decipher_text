@@ -54,7 +54,7 @@ void Page::setRefinedDisplay(){
 }
 
 QString Page::getText(){
-  int i, lim;
+  /*int i, lim;
   QString out;
 
   lim = content.length();
@@ -62,9 +62,9 @@ QString Page::getText(){
   for(i = 0; i < lim; i++){
     out += content[i].data;
     out += " ";
-  }
+  }*/
 
-  return out;
+  return dataX;
 }
 
 void Page::interpretCurrentWord(int line, int pos){
@@ -146,7 +146,7 @@ void Page::createText(){
   lim = content.length();
   dataX = "";
 
-  for (i = 0; i < lim; i++) dataX += content[i].data;
+  for (i = 0; i < lim; i++) dataX += content[i].data + " ";
 }
 
 void Page::setOcrStatus(bool staat){
@@ -159,5 +159,10 @@ bool Page::getOcrStatus(){
 
 void Page::importOcr(QVector<wordUnit> ocrImport){
   this->content = ocrImport;
+  createText();
   setOcrStatus(true);
+}
+
+void Page::resetDataX(QString newDataX){
+  dataX = newDataX;
 }

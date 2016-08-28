@@ -12,6 +12,7 @@ public:
   void setFullDisplay();
   void setRefinedDisplay();
   QString getText();
+  void resetDataX(QString newDataX);
   void appendWord(QString data, int x1, int y1, int x2, int y2);
 
   void importOcr(QVector<wordUnit> ocrImport);
