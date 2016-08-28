@@ -54,16 +54,6 @@ void Page::setRefinedDisplay(){
 }
 
 QString Page::getText(){
-  /*int i, lim;
-  QString out;
-
-  lim = content.length();
-
-  for(i = 0; i < lim; i++){
-    out += content[i].data;
-    out += " ";
-  }*/
-
   return dataX;
 }
 
