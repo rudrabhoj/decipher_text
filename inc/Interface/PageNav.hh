@@ -25,5 +25,8 @@ private:
 
   void listItemChanged();
 
+  //Foreign dependents
+  void dispatchSelectionChangeMessage();
+
 };
 #endif

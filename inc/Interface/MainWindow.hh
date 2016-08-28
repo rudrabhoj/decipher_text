@@ -107,9 +107,11 @@ private:
 
   //Foreign Dependenices
   std::function<void()> pageUpdateWrapper;
+  std::function<void()> listNavUpdateWrapper;
   void loadOCRedText();
 
   void syncNavbar();
+  void backupOldText();
   void setSignalWrappers();
   void sendEnableLangRequest(QString lang);
   void sendDisableLangRequest(QString lang);

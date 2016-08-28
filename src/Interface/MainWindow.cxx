@@ -208,8 +208,9 @@ void MainWindow::configureLanguageConnections(){
 }
 
 void MainWindow::configureWidgetConnections(){
-  connect(pageList, &QListWidget::currentItemChanged, this, &MainWindow::listItemChanged);
+  //Nothing to do for now
 }
+
 
 
 void MainWindow::handleRecognizeNow(){
@@ -325,6 +326,8 @@ void MainWindow::listItemChanged(){
   int i;
   i = pageList->currentRow();
 
+  backupOldText();
+
   syncProjectManagerPageSelection(i);
 
   if (i >= 0){
@@ -338,6 +341,23 @@ void MainWindow::listItemChanged(){
 //Primary Dependence on Foreign Classes
 QList<Page>* MainWindow::getPageLink(){
   return localControl->getProjectManager()->emitPages();
+}
+
+void MainWindow::backupOldText(){
+  QList<Page>* localPages;
+  int oldIndex;
+  QString dummyDataX;
+
+  localPages = getPageLink();
+
+  oldIndex = pageList->getOldSelection();
+
+  dummyDataX = editor->toPlainText();
+
+  if(oldIndex > -1 && (*localPages)[oldIndex].getOcrStatus()){
+    (*localPages)[oldIndex].resetDataX(dummyDataX);
+  }
+
 }
 
 void MainWindow::syncProjectManagerPageSelection(int i){
@@ -437,9 +457,12 @@ QString MainWindow::getFullPage(int index){
 //Assists Foreigners
 void MainWindow::setSignalWrappers(){
   pageUpdateWrapper = [&](){syncNavbar();};
+  listNavUpdateWrapper = [&](){ listItemChanged(); };
 
   localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
+  localControl->getPubSub()->subscribe("pageNavSelChanged", &listNavUpdateWrapper);
 }
+
 
 QString MainWindow::defaultOCRLanguage(){
   return "eng";

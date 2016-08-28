@@ -45,4 +45,11 @@ void PageNav::listItemChanged(){
   } else {
     setNewSelection( currentRow() );
   }
+
+  dispatchSelectionChangeMessage();
+}
+
+//Foreign Dependents
+void PageNav::dispatchSelectionChangeMessage(){
+  localControl->getPubSub()->publish("pageNavSelChanged");
 }

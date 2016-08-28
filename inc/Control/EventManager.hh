@@ -42,10 +42,10 @@ public:
 /*
 
 List of Messages:
-1. pagesChanged : When there is change in number and/or order of pages. Or content.
-                  It should be clear changes are made always in Document.ProjectManager, not GUI!
-                  GUI just sync itself.
-2. ocrProcessed : When a new page is OCRed.
-3. drawLines    : When cursor is on a valid OCRed text. Draw lines by on corresponding image on the Canvas.
-
+1. pagesChanged       : When there is change in number and/or order of pages. Or content.
+                        It should be clear changes are made always in Document.ProjectManager, not GUI!
+                        GUI just sync itself.
+2. ocrProcessed       : When a new page is OCRed.
+3. drawLines          : When cursor is on a valid OCRed text. Draw lines by on corresponding image on the Canvas.
+4. pageNavSelChanged  : When navbox's currently selected page has changed.
 */
