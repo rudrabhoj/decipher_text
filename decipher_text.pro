@@ -33,3 +33,5 @@ LIBS += -ltesseract
 
 QT += widgets
 QT += core
+
+#CONFIG += c++11
