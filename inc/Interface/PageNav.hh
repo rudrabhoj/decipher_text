@@ -9,14 +9,21 @@
 class PageNav : public QListWidget{
 public:
   PageNav(QMainWindow *parent, ControlData *ctrlData);
-  int presentSelection();
-  int pastSelection();
+  int getOldSelection();
+  int getNewSelection();
   //void allocateResources();
 private:
   ControlData *localControl;
   int oldSelection;
+  int newSelection;
 
   void configure();
-  void setPastSelection(int index);
+  void configureConnections();
+
+  void setOldSelection(int index);
+  void setNewSelection(int index);
+
+  void listItemChanged();
+
 };
 #endif
