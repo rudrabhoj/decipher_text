@@ -46,7 +46,6 @@ List of Messages:
                   It should be clear changes are made always in Document.ProjectManager, not GUI!
                   GUI just sync itself.
 2. ocrProcessed : When a new page is OCRed.
-
-
+3. drawLines    : When cursor is on a valid OCRed text. Draw lines by on corresponding image on the Canvas.
 
 */
