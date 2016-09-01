@@ -98,6 +98,8 @@ private:
   void handleLanguageChange();
 
   void handleOpenProject();
+  void handleSaveAsProject();
+  void handleSaveProject();
   void handleAddProject();
 
   void showLoadDialog();

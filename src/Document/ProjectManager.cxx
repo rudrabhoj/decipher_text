@@ -1,23 +1,26 @@
 #include <Document/ProjectManager.hh>
+#include <Document/wordUnit.hh>
 #include <QDir>
+#include <QVector>
 #include <QTextStream>
 #include <QStandardPaths>
 #include <QFileInfo>
 #include <iostream>
 
 ProjectManager::ProjectManager(QString projDirName){
-  rootDir = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0] + 
-                                                              "/decipher_text Projects";
-  dirName = projDirName;
+  QString designatedRoot;
 
-  projectName = projDirName;
+  designatedRoot = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0] +
+                                                              "/decipher_text Projects";
+
+  configureRoot(designatedRoot, projDirName);
 
   verifyProjectRoot();
 
   createEmptyProject();
 
-  setSaveState(true);
-  
+  setSaveState(false);
+
   setCurrentPageDefault();
 
   /*
@@ -26,6 +29,12 @@ ProjectManager::ProjectManager(QString projDirName){
 
   addPages(myPages);
   */
+}
+
+void ProjectManager::configureRoot(QString rootName, QString projDirName){
+  rootDir = rootName;
+  dirName = projDirName;
+  projectName = projDirName;
 }
 
 void ProjectManager::setSaveState(bool staat){
@@ -116,7 +125,7 @@ void ProjectManager::createEmptyProject(){
   }
 
   targetDir.mkdir(targetName);
-  createProjectFile("");
+  createProjectFile("/project.dtp", "");
 
   createImageDirs();
 }
@@ -134,11 +143,11 @@ void ProjectManager::createImageDirs(){
   dummyDir.mkdir(imageRootDir + "/thumbnail");
 }
 
-void ProjectManager::createProjectFile(QString projContents){
+void ProjectManager::createProjectFile(QString pName, QString projContents){
   QString targetName;
   QFile pFile;
 
-  targetName = getWorkingDir() + "/project.dtp";
+  targetName = getWorkingDir() + pName;
 
   pFile.setFileName(targetName);
 
@@ -152,12 +161,60 @@ void ProjectManager::createProjectFile(QString projContents){
 }
 
 
+bool ProjectManager::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory){
+
+    QDir originDirectory(sourceDir);
+
+    if (! originDirectory.exists())
+    {
+        return false;
+    }
+
+    QDir destinationDirectory(destinationDir);
+
+    if(destinationDirectory.exists() && !overWriteDirectory)
+    {
+        return false;
+    }
+    else if(destinationDirectory.exists() && overWriteDirectory)
+    {
+        destinationDirectory.removeRecursively();
+    }
+
+    originDirectory.mkpath(destinationDir);
+
+    foreach (QString directoryName, originDirectory.entryList(QDir::Dirs | \
+                                                              QDir::NoDotAndDotDot))
+    {
+        QString destinationPath = destinationDir + "/" + directoryName;
+        originDirectory.mkpath(destinationPath);
+        copyPath(sourceDir + "/" + directoryName, destinationPath, overWriteDirectory);
+    }
+
+    foreach (QString fileName, originDirectory.entryList(QDir::Files))
+    {
+        QFile::copy(sourceDir + "/" + fileName, destinationDir + "/" + fileName);
+    }
+
+    /*! Possible race-condition mitigation? */
+    QDir finalDestination(destinationDir);
+    finalDestination.refresh();
+
+    if(finalDestination.exists())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
 bool ProjectManager::removeDir(const QString &dirName){
   bool result = true;
   QDir dir(dirName);
 
   if (dir.exists(dirName)) {
-    Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden 
+    Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden
     | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
 
       if (info.isDir()) {
@@ -187,6 +244,232 @@ QString ProjectManager::getProjectName(){
   return projectName;
 }
 
+QStringList ProjectManager::breakSaveString(QString saveName){
+  QString token;
+  QStringList linkData;
+
+  token = "/";
+
+  #ifdef _WIN32
+    token = "\\";
+  #endif
+
+  linkData = saveName.split(token);
+
+  return  linkData;
+}
+
+QString ProjectManager::getSaveFName(QString saveName){
+  QString fName;
+  int lim;
+  QStringList linkData;
+
+  linkData = breakSaveString(saveName);
+  lim = linkData.length();
+
+  fName = linkData[lim - 1];
+
+  if(fName.right(4) != ".dtp") fName += ".dtp";
+
+  return fName;
+}
+
+QString ProjectManager::getSaveContainer(QString saveName){
+  QString fName, containerDir;
+
+  fName = getSaveFName(saveName);
+
+  if(fName.right(4) != ".dtp"){
+    containerDir = fName;
+    fName += ".dtp";
+  } else{
+    containerDir = fName.left(fName.length() - 4 );
+  }
+
+  return containerDir;
+}
+
+QString ProjectManager::getSaveRootDir(QString saveName){
+  int i, lim;
+  QString rootUrl;
+  QStringList linkData;
+
+  linkData = breakSaveString(saveName);
+  lim = linkData.length();
+
+  for(i = 0; i < lim - 1; i++) rootUrl += linkData[i] + "/";
+
+  rootUrl = rootUrl.left(rootUrl.length() - 1);
+
+  return rootUrl;
+}
+
+void ProjectManager::saveAs(QString saveName){
+  QString fName, containerDir, rootUrl;
+
+  if (saveName.trimmed() != ""){
+    fName = getSaveFName(saveName);
+    containerDir = getSaveContainer(saveName);
+    rootUrl = getSaveRootDir(saveName);
+
+    createSaveEnvironment(fName, containerDir, rootUrl);
+  }
+}
+
+void ProjectManager::createSaveContainer(QString containerDir, QString rootUrl){
+  QString targetContainer;
+  QDir targetContainerDir;
+
+  targetContainer = rootUrl + "/" + containerDir;
+  targetContainerDir.setPath(targetContainer);
+
+  if (targetContainerDir.exists()) removeDir(targetContainer);
+
+  targetContainerDir.mkdir(targetContainer);
+}
+
+void ProjectManager::createSaveImageDir(QString containerDir, QString rootUrl){
+  QString imgRoot;
+  QDir dummyDir;
+
+  imgRoot = rootUrl + "/" + containerDir + "/images";
+
+  dummyDir.mkdir(imgRoot);
+}
+
+void ProjectManager::copySaveImageEnvironment(QString containerDir, QString rootUrl){
+  QString projectWorkingDir, imageRootDir, newImgRoot;
+  QDir dummyDir;
+
+  projectWorkingDir = getWorkingDir();
+  imageRootDir = projectWorkingDir + "/images";
+  newImgRoot = rootUrl + "/" + containerDir + "/images";
+
+  copyPath(imageRootDir + "/full", newImgRoot + "/full", true);
+  copyPath(imageRootDir + "/refined", newImgRoot + "/refined", true);
+  copyPath(imageRootDir + "/thumbnail", newImgRoot + "/thumbnail", true);
+}
+
+void ProjectManager::createSaveImageEnvironment(QString containerDir, QString rootUrl){
+  createSaveImageDir(containerDir, rootUrl);
+  copySaveImageEnvironment(containerDir, rootUrl);
+}
+
+void ProjectManager::reConfigurePageRoot(QString rootUrl){
+  int i, lim;
+
+  lim = pageList.length();
+
+  for(i = 0; i < lim; i++){
+    pageList[i].updateRoot(rootUrl);
+  }
+
+}
+
+void ProjectManager::createSaveEnvironment(QString fName, QString containerDir, QString rootUrl){
+  createSaveContainer(containerDir, rootUrl);
+  createSaveImageEnvironment(containerDir, rootUrl);
+  configureRoot(rootUrl, containerDir);
+  reConfigurePageRoot(rootUrl + "/" + containerDir);
+  dtpGenerateFile(fName);
+
+  std::cout << "File: " << fName.toUtf8().data() << std::endl;
+  std::cout << "Container: " << containerDir.toUtf8().data() << std::endl;
+  std::cout << "Root URL: " << rootUrl.toUtf8().data() << std::endl;
+}
+
+void ProjectManager::dtpGenerateFile(QString fName){
+  QString pgNames, pgSemantics, pgData, sendData;
+
+  sendData = dtpGetPageNames();
+  sendData += "\n\n";
+  sendData += dtpGetPageSemantics();
+  sendData += "\n\n";
+  sendData += dtpGetData();
+
+  createProjectFile("/" + fName, sendData);
+}
+
+QString ProjectManager::dtpGetPageNames(){
+  QString sendList;
+  QString dummy;
+  int i, lim;
+
+  lim = pageList.length();
+  for (i = 0; i < lim; i++){
+    dummy = "ADDPAGE " + pageList[i].getFName();
+    sendList += dummy + "\n";
+  }
+
+  return sendList;
+}
+
+QString ProjectManager::dtpGetPageSemantics(){
+  QString sendList;
+  QString dummy;
+  int i, lim;
+
+  sendList = "";
+
+  lim = pageList.length();
+  for (i = 0; i < lim; i++){
+
+    if(pageList[i].getOcrStatus()){
+      dummy = "SEMANTICS " + QString::number(i) + " " + dtpGenerateSemantics(i);
+      sendList += dummy + "\n";
+    }
+  }
+  return sendList;
+}
+
+QString ProjectManager::dtpGenerateSemantics(int index){
+  QString sendList, dummy, myData, lineBool;
+  int i, lim;
+  QVector<wordUnit> myContents;
+
+  sendList = "";
+
+  myContents = pageList[index].getAllWords();
+  lim = myContents.length();
+
+  for(i = 0; i < lim; i++){
+    if(myContents[i].newLine){
+      myData = "///n///";
+      lineBool = " true";
+    } else {
+      myData = myContents[i].data;
+      lineBool = " false";
+    }
+
+    dummy = myData + " " + QString::number(myContents[i].x1) + " " + QString::number(myContents[i].y1);
+    dummy += " " + QString::number(myContents[i].x2) + " " + QString::number(myContents[i].y2);
+    dummy += " " + QString::number(myContents[i].lineNo) + " " + QString::number(myContents[i].wordNo);
+    dummy += lineBool;
+    sendList += dummy + "__@n@__";
+  }
+
+  sendList = sendList.left(sendList.length() - 7); //removing trailing __@n@__
+
+  return sendList;
+}
+
+QString ProjectManager::dtpGetData(){
+  QString sendList;
+  QString dummy;
+  int i, lim;
+
+  sendList = "";
+
+  lim = pageList.length();
+  for (i = 0; i < lim; i++){
+
+    if(pageList[i].getOcrStatus()){
+      dummy = "DATA " + QString::number(i) + " " + pageList[i].getText().replace("\n","///n///" );
+      sendList += dummy + "\n";
+    }
+  }
+  return sendList;
+}
 
 
 //Foreign dependencies:

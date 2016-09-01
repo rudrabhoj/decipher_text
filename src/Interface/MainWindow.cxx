@@ -185,6 +185,7 @@ void MainWindow::configureConnections(){
 
 void MainWindow::configureMenuConnections(){
   connect(openProject, &QAction::triggered, this, &MainWindow::handleOpenProject);
+  connect(saveProject, &QAction::triggered, this, &MainWindow::handleSaveProject);
   connect(addImages, &QAction::triggered, this, &MainWindow::handleAddProject);
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
@@ -250,6 +251,19 @@ void MainWindow::handleOpenProject(){
   for (i = 0; i < lim; i++){
     std::cout << openNames[i].toUtf8().data() << std::endl;
   }
+}
+
+void MainWindow::handleSaveProject(){
+  handleSaveAsProject();
+}
+
+void MainWindow::handleSaveAsProject(){
+  QString saveName;
+
+  saveName = QFileDialog::getSaveFileName(this, "Save the project As...", QDir::homePath(),
+    "Decipher Text Project (*.dtp)");
+
+  localControl->getProjectManager()->saveAs(saveName);
 }
 
 void MainWindow::handleAddProject(){

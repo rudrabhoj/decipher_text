@@ -33,6 +33,16 @@ void Page::setFileName(QString fname){
   thumbLink = imageThumbnail + "/" + fname;
 }
 
+void Page::updateRoot(QString newRoot){
+  projectRoot = newRoot;
+  setImagePaths();
+  setFileName(realName);
+}
+
+QString Page::getFName(){
+  return realName;
+}
+
 QString Page::getFullDisplayLink(){
   return fullLink;
 }
@@ -68,6 +78,10 @@ void Page::interpretCurrentWord(int line, int pos){
   if(!dummyWord.newLine){
     currentWord = dummyWord;
   }
+}
+
+QVector<wordUnit> Page::getAllWords(){
+  return content;
 }
 
 wordUnit Page::convertWord(QList<wordUnit> myLine, int position){
