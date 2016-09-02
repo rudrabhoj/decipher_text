@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QTextStream>
 #include <QStandardPaths>
+#include <QCoreApplication>
 #include <QFileInfo>
 #include <iostream>
 
@@ -97,9 +98,9 @@ void ProjectManager::addSinglePage(QString page){
 
   QFile::copy(page, imagesFull + "/" + ofName);
 
-  commandExe = "convert ";
+  commandExe = getImageMagickCommand() + " ";
   commandExe += "\"" + imagesFull + "/" + ofName + "\"";
-  commandExe += " -thumbnail 104x148\\! ";
+  commandExe += " -thumbnail 104x148! ";
   commandExe += "\"" + imagesThumb + "/" + ofName + "\"";
 
   system(commandExe.toUtf8().data());
@@ -158,6 +159,33 @@ void ProjectManager::createProjectFile(QString pName, QString projContents){
 
     pFile.close();
   }
+}
+
+QString ProjectManager::getImageMagickCommand(){
+  QFileInfo location1;
+  QFileInfo location2;
+  QString binDir, path;
+
+  binDir = QCoreApplication::applicationDirPath();
+  return "convert";
+
+  #ifdef _WIN32
+  location1.setFile(binDir + "\\imagemagick\\convert.exe");
+  location2.setFile(binDir + "\\imagemagick\\convert.exe"); //For now single location on windows
+  #else
+  location1.setFile("/usr/bin/convert");
+  location2.setFile("/usr/local/bin/convert");
+  #endif
+
+  if(location1.exists() && location1.isFile()){
+    path = location1.absoluteFilePath();
+  } else if(location2.exists() && location2.isFile()) {
+    path = location1.absoluteFilePath();
+  } else {
+    path = "";
+  }
+
+  return path;
 }
 
 

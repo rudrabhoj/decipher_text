@@ -44,6 +44,7 @@ private:
 
   bool removeDir(const QString &dirName);
   bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
+  QString getImageMagickCommand();
   QString getWorkingDir();
 
   QString getSaveRootDir(QString saveName);
