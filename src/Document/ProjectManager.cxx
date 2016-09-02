@@ -278,9 +278,9 @@ QStringList ProjectManager::breakSaveString(QString saveName){
 
   token = "/";
 
-  #ifdef _WIN32
-    token = "\\";
-  #endif
+  //#ifdef _WIN32
+    //token = "\\";
+  //#endif
 
   linkData = saveName.split(token);
 
@@ -325,7 +325,9 @@ QString ProjectManager::getSaveRootDir(QString saveName){
   linkData = breakSaveString(saveName);
   lim = linkData.length();
 
-  for(i = 0; i < lim - 1; i++) rootUrl += linkData[i] + "/";
+  for(i = 0; i < lim - 1; i++){
+    rootUrl += linkData[i] + "/";
+  }
 
   rootUrl = rootUrl.left(rootUrl.length() - 1);
 
