@@ -28,7 +28,7 @@ make
 I recently upgraded to Windows 10 and ironically has been not too annoyed. So I get to test compiling there.
 Your best bet would be to use MSYS2. Get leptonica from there and follow the instructions given by the Tesseract Project github to learn how to compile tesseract properly with MSYS2.
 There are lot of guides on the internet on how to setup Qt 5 with MYSYS2. Follow them.
-I recommend (this)[http://wiki.netbeans.org/HowToSetup64-BitQt5WithNetBeans8.0OnWindows].
+I recommend [this](http://wiki.netbeans.org/HowToSetup64-BitQt5WithNetBeans8.0OnWindows) tutorial.
 You can ignore the netbeans part ;)
 Once you have everything up and running, just do what the linux/freebsd folks are expected to do:
 qmake
