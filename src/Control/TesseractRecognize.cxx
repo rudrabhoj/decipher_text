@@ -18,6 +18,7 @@ void TesseractRecognize::doRecognize(QString page){
   Pix *inputImage;
   char *word;
   char languageArg[425];
+  char tessDataPath[1024];
   int x1, y1, x2, y2;
   tesseract::TessBaseAPI process;
   tesseract::ResultIterator *voyager;
@@ -33,6 +34,7 @@ void TesseractRecognize::doRecognize(QString page){
    * few bytes a session would leak otherwise.
    */
   strcpy(languageArg, getLanguageSettings());
+  strcpy(tessDataPath, getTessDataSettings());
 
   inputImage = pixRead(page.toUtf8().data());
 
@@ -42,7 +44,7 @@ void TesseractRecognize::doRecognize(QString page){
 
   std::cout << "Buffer at function = " << languageArg << std::endl;
 
-  if (process.Init("/usr/local/share/tessdata", languageArg )){
+  if (process.Init(tessDataPath, languageArg )){
     //Again, handle error here
   }
 
@@ -166,6 +168,20 @@ char* TesseractRecognize::getLanguageSettings(){
   strcpy(buffer, array.data());
 
   std::cout << "Buffer at origin = " << buffer << std::endl;
+
+  return buffer;
+}
+
+char* TesseractRecognize::getTessDataSettings(){
+  char *buffer;
+  QString tessData;
+
+  tessData = localControl->getSetting()->getTessdataPath();
+  buffer = new char[tessData.length() + 8]; //extra space for same reason as above ^
+  QByteArray array = tessData.toLocal8Bit();
+  strcpy(buffer, array.data());
+
+  std::cout << "TessData Path = " << buffer << std::endl;
 
   return buffer;
 }

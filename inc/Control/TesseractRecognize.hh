@@ -41,6 +41,7 @@ private:
   //Foreign Dependents
   QList<Page> *getStoredPages();
   char* getLanguageSettings();
+  char* getTessDataSettings();
 };
 
 #endif
