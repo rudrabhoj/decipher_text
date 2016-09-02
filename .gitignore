@@ -33,6 +33,7 @@ debug/*
 #Generated Build related Files
 Makefile
 work.sh
+work.bat
 .qmake.stash
 
 #SUBLIME SPECIFIC
