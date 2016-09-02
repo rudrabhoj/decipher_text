@@ -112,45 +112,45 @@ void MainWindow::configureAction(){
   QPixmap ocrNowPix(iconPath + "/ocr.png");
   QPixmap settingPix(iconPath + "/setting.png");
 
-  newProject = new QAction(QIcon(newPix), newProjectString);
+  newProject = new QAction(QIcon(newPix), newProjectString, this);
   newProject->setIconVisibleInMenu(false);
 
-  openProject = new QAction(QIcon(openPix), openProjectString);
+  openProject = new QAction(QIcon(openPix), openProjectString, this);
   openProject->setIconVisibleInMenu(false);
 
-  addImages = new QAction(addImagesString);
+  addImages = new QAction(addImagesString, this);
 
-  saveProject = new QAction(QIcon(savePix), saveProjectString);
+  saveProject = new QAction(QIcon(savePix), saveProjectString, this);
   saveProject->setIconVisibleInMenu(false);
 
-  saveAsProject = new QAction(saveAsProjectString);
+  saveAsProject = new QAction(saveAsProjectString, this);
   saveAsProject->setIconVisibleInMenu(false);
 
-  exit = new QAction(exitString);
+  exit = new QAction(exitString, this);
   exit->setIconVisibleInMenu(false);
 
-  zoomIn = new QAction(QIcon(zoomInPix), zoomInString);
+  zoomIn = new QAction(QIcon(zoomInPix), zoomInString, this);
   zoomIn->setIconVisibleInMenu(false);
 
-  zoomOut = new QAction(QIcon(zoomOutPix), zoomOutString);
+  zoomOut = new QAction(QIcon(zoomOutPix), zoomOutString, this);
   zoomOut->setIconVisibleInMenu(false);
 
-  zoomNormal = new QAction(QIcon(zoomNormalPix), zoomNormalString);
+  zoomNormal = new QAction(QIcon(zoomNormalPix), zoomNormalString, this);
   zoomNormal->setIconVisibleInMenu(false);
 
-  orcNow = new QAction(QIcon(ocrNowPix), orcNowString);
+  orcNow = new QAction(QIcon(ocrNowPix), orcNowString, this);
   orcNow->setIconVisibleInMenu(false);
 
-  fontSettings = new QAction(fontSettingsString);
+  fontSettings = new QAction(fontSettingsString, this);
   fontSettings->setIconVisibleInMenu(false);
 
-  prefSettings = new QAction(QIcon(settingPix), prefSettingsString);
+  prefSettings = new QAction(QIcon(settingPix), prefSettingsString, this);
   prefSettings->setIconVisibleInMenu(false);
 
-  about = new QAction(aboutString);
+  about = new QAction(aboutString, this);
   about->setIconVisibleInMenu(false);
 
-  documentation = new QAction(documentationString);
+  documentation = new QAction(documentationString, this);
   documentation->setIconVisibleInMenu(false);
 
   configureLanguageActions();
@@ -163,7 +163,7 @@ void MainWindow::configureLanguageActions(){
   lim = allLanguages.length();
 
   for(i = 0; i < lim; i++){
-    lang = new QAction(allLanguages[i]);
+    lang = new QAction(allLanguages[i], this);
     lang->setCheckable(true);
     if (allLanguages[i] == defaultOCRLanguage()) lang->setChecked(true);
     languageActions.push_back(lang);
