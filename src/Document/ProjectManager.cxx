@@ -23,13 +23,6 @@ ProjectManager::ProjectManager(QString projDirName){
   setSaveState(false);
 
   setCurrentPageDefault();
-
-  /*
-  QStringList myPages;
-  myPages.push_back("/home/rudrabhoj/Desktop/20012.jpg");
-
-  addPages(myPages);
-  */
 }
 
 void ProjectManager::configureRoot(QString rootName, QString projDirName){
@@ -85,8 +78,7 @@ void ProjectManager::addPages(QString page){
 
 void ProjectManager::addSinglePage(QString page){
   QFileInfo oldFileInfo(page);
-  QString ofName, imagesRoot, imagesFull, imagesRefined, imagesThumb;
-  QString commandExe;
+  QString ofName, imagesRoot, imagesFull, imagesRefined, imagesThumb, commandExe;
   int futurePageIndex;
 
   ofName = oldFileInfo.fileName();
@@ -107,7 +99,11 @@ void ProjectManager::addSinglePage(QString page){
 
   futurePageIndex = pageList.length();
 
-  Page dummyPage(getWorkingDir(), futurePageIndex);
+  commitPage(ofName, futurePageIndex);
+}
+
+void ProjectManager::commitPage(QString ofName, int index){
+  Page dummyPage(getWorkingDir(), index);
   dummyPage.setFileName(ofName);
 
   pageList.push_back(dummyPage);
@@ -158,6 +154,22 @@ void ProjectManager::createProjectFile(QString pName, QString projContents){
     out << projContents;
 
     pFile.close();
+  }
+}
+
+bool ProjectManager::sanitizationNeeded(QString testUrl){
+  QStringList brokenUrl;
+  QString fileSelf, fileContainer;
+  int lim;
+
+  brokenUrl = testUrl.split("/");
+  lim = brokenUrl.length();
+  fileSelf = brokenUrl[lim - 1];
+  fileContainer = brokenUrl[lim - 2];
+  if(fileSelf.indexOf(fileContainer) > -1){
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -261,6 +273,18 @@ bool ProjectManager::removeDir(const QString &dirName){
   return result;
 }
 
+QString ProjectManager::trimCommand(QString lineData, QString command, QString modifier){
+  int trimLen, lim;
+  QString sendData;
+
+  trimLen = command.length() + modifier.length() + 1;
+  lim = lineData.length();
+  sendData = lineData.right(lim - trimLen);
+  sendData = sendData.trimmed();
+
+  return sendData;
+}
+
 
 QString ProjectManager::getWorkingDir(){
   return rootDir + "/" + this->dirName;
@@ -338,6 +362,7 @@ void ProjectManager::saveAs(QString saveName){
   QString fName, containerDir, rootUrl;
 
   if (saveName.trimmed() != ""){
+    if(sanitizationNeeded(saveName)) saveName = open2SaveUrlConvert(saveName);
     fName = getSaveFName(saveName);
     containerDir = getSaveContainer(saveName);
     rootUrl = getSaveRootDir(saveName);
@@ -345,6 +370,45 @@ void ProjectManager::saveAs(QString saveName){
     createSaveEnvironment(fName, containerDir, rootUrl);
   }
 }
+
+QString ProjectManager::open2SaveUrlConvert(QString openName){
+  QStringList myList;
+  QString sendData;
+  int lim, i;
+
+  myList = openName.split("/");
+  lim = myList.length();
+
+  for(i = 0; i < (lim - 1); i++){
+    sendData += myList[i];
+    if (i < lim - 2) sendData += "/";
+  }
+
+  sendData += ".dtp";
+
+  return sendData;
+}
+
+void ProjectManager::openProject(QString openName){
+  QString targetFile, targetRoot, targetContainer;
+
+  if (openName.trimmed() != ""){
+    if(sanitizationNeeded(openName)) openName = open2SaveUrlConvert(openName);
+
+
+    targetFile = getSaveFName(openName);
+    targetContainer = getSaveContainer(openName);
+    targetRoot = getSaveRootDir(openName);
+
+    configureRoot(targetRoot, targetContainer);
+    dtpDeleteAllPages();
+    publishPagesChanged();
+
+    loadInterpretDtp(targetRoot, targetContainer, targetFile);
+  }
+}
+
+
 
 void ProjectManager::createSaveContainer(QString containerDir, QString rootUrl){
   QString targetContainer;
@@ -499,6 +563,102 @@ QString ProjectManager::dtpGetData(){
     }
   }
   return sendList;
+}
+
+void ProjectManager::dtpDeleteAllPages(){
+  if(pageList.length() > 0){
+    pageList.clear();
+  }
+}
+
+void ProjectManager::loadInterpretDtp(QString targetRoot, QString targetContainer, QString targetFile){
+  QString targetUrl, lineData;
+  QFile inputFile;
+
+  targetUrl = targetRoot + "/" + targetContainer + "/" + targetFile;
+  inputFile.setFileName(targetUrl);
+  if(inputFile.open(QIODevice::ReadOnly)){
+    QTextStream localInput(&inputFile);
+    while(!localInput.atEnd()){
+      lineData = localInput.readLine();
+      interpretDtp(lineData);
+    }
+    inputFile.close();
+  }
+}
+
+void ProjectManager::interpretDtp(QString lineData){
+  QStringList brokenLine;
+  QString command;
+  int modifier;
+
+  brokenLine = lineData.split(" ");
+  command = brokenLine[0];
+
+  if (command == "ADDPAGE"){
+    lineData = trimCommand(lineData, command, "");
+    interpretDtpAddPage(lineData);
+  } else if(command == "SEMANTICS"){
+    modifier = brokenLine[1].toInt();
+    lineData = trimCommand(lineData, command, brokenLine[1]);
+    interpretDtpSemantics(modifier, lineData);
+  } else if(command == "DATA"){
+    modifier = brokenLine[1].toInt();
+    lineData = trimCommand(lineData, command, brokenLine[1]);
+    interpretDtpData(modifier, lineData);
+  }
+}
+
+void ProjectManager::interpretDtpAddPage(QString lineData){
+  int index;
+
+  index = pageList.length();
+
+  commitPage(lineData, index);
+
+  publishPagesChanged();
+}
+
+void ProjectManager::interpretDtpSemantics(int modifier, QString lineData){
+  QStringList masterList, localList;
+  int lim, i;
+  QVector<wordUnit> localPageList;
+
+  masterList = lineData.split("__@n@__");
+  lim = masterList.length();
+
+  for (i = 0; i < lim; i++){
+    localList = masterList[i].split(" ");
+    localPageList.push_back( getSemantics(localList) );
+  }
+  pageList[modifier].importOcr(localPageList);
+}
+
+wordUnit ProjectManager::getSemantics(QStringList sem){
+  wordUnit dummyUnit;
+  bool isNewPage;
+
+  if(sem[7] == "true"){
+    isNewPage = true;
+  } else {
+    isNewPage = false;
+  }
+
+  dummyUnit.data = sem[0].replace("///n///", "\n");
+  dummyUnit.x1 = sem[1].toInt();
+  dummyUnit.y1 = sem[2].toInt();
+  dummyUnit.x2 = sem[3].toInt();
+  dummyUnit.y2 = sem[4].toInt();
+  dummyUnit.lineNo = sem[5].toInt();
+  dummyUnit.wordNo = sem[6].toInt();
+  dummyUnit.newLine = isNewPage;
+
+  return dummyUnit;
+}
+
+void ProjectManager::interpretDtpData(int modifier, QString lineData){
+  lineData = lineData.replace("///n///", "\n");
+  pageList[modifier].resetDataX(lineData);
 }
 
 

@@ -242,14 +242,14 @@ void MainWindow::handleLanguageChange(){
 
 void MainWindow::handleOpenProject(){
   QStringList openNames;
-  int i, lim;
+  int lim;
 
   openNames = QFileDialog::getOpenFileNames(this, "Select a project file to open...", QDir::homePath(),
     "Decipher Text Project (*.dtp)");
   lim = openNames.length();
 
-  for (i = 0; i < lim; i++){
-    std::cout << openNames[i].toUtf8().data() << std::endl;
+  if (lim > 0){
+    localControl->getProjectManager()->openProject(openNames[0]);
   }
 }
 

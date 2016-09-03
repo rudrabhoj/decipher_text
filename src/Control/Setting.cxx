@@ -69,7 +69,10 @@ void Setting::newConfigFile(){
 QString Setting::getConfigDir(){
   QString configFolder;
   configFolder = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0];
-  configFolder += "/" + qApp->applicationName();
+  if(configFolder.indexOf(qApp->applicationName()) <= -1){
+    configFolder += "/" + qApp->applicationName();
+  }
+
   return configFolder;
 }
 
@@ -197,7 +200,7 @@ QString Setting::getCurrentState(){
 
 QString Setting::getDefaultState(){
   setDefaults();
-  
+
   return getCurrentState();
 }
 
