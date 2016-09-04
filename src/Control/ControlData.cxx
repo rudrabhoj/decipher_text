@@ -44,3 +44,15 @@ ProjectManager* ControlData::getProjectManager(){
 Language* ControlData::getLanguage(){
   return language;
 }
+
+QString ControlData::createName(){
+  QString myName;
+
+  myName = myProject->getProjectName();
+  if (!myProject->getSaveState()) myName += "*";
+  myName += " - ";
+  myName += preferences->getAppName();
+  myName += " 0.5-alpha";
+
+  return myName;
+}

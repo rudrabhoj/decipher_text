@@ -37,7 +37,7 @@ void RecognizeProcess::configureLabels(){
 void RecognizeProcess::configureLayout(){
   centralLayout->setSpacing(15);
   centralLayout->setAlignment(Qt::AlignVCenter);
-  
+
   centralLayout->addWidget(description);
   centralLayout->addWidget(progress);
 
@@ -58,7 +58,7 @@ void RecognizeProcess::recognizeNow(QString pageLink, int pageIndex){
 
 void RecognizeProcess::closeDialog(){
   //delete tessRecog;
-
+  unSetSave();
   accept();
 }
 
@@ -68,6 +68,10 @@ void RecognizeProcess::closeDialog(){
 void RecognizeProcess::implementOcr(QString pageLink, int pageIndex){
   TesseractRecognize recognizeDaemon(localControl);
   recognizeDaemon.recognize(pageLink, pageIndex);
+}
+
+void RecognizeProcess::unSetSave(){
+  localControl->getProjectManager()->setSaveState(false);
 }
 
 void RecognizeProcess::configureConnections(){

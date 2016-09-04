@@ -11,6 +11,7 @@
 class TextEditor : public QTextEdit{
 public:
   TextEditor(QMainWindow *parent, ControlData *ctrlData);
+  void syncText(QString inputText);
   void editorFontSetting();
 
 private:
@@ -20,12 +21,16 @@ private:
   void enableFontFamily();
   void configureConnections();
   void cursorMoved();
+  void unSetSave();
+  void enableSave();
 
   //Foreign dependents
   QString getConfigFontFamily();
   double getConfigFontSize();
   void syncCurrentWord(int lineNo, int pos);
   void sendDrawEvent();
+  bool getSaveStatus();
+  void configureSave(bool staat);
 
 };
 

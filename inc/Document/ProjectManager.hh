@@ -18,6 +18,9 @@ public:
   QList<Page> *emitPages();
   void setCurrentPage(int pgIndex);
   int getCurrentPage();
+  void setSaveState(bool staat);
+  bool getSaveHistory();
+  bool getSaveState();
 
   void saveAs(QString saveName);
   void openProject(QString openName);
@@ -32,9 +35,11 @@ private:
   int currentPage;
   QString projectName;
   bool saveState;
+  bool saveHistory;
 
   void setCurrentPageDefault();
   void createEmptyProject();
+  void loadEmptyDefault(QString projDirName);
   void copyProject(QString newRoot, QString newDir);
   void addSinglePage(QString page);
   void commitPage(QString ofName, int index);
@@ -42,7 +47,7 @@ private:
   void verifyProjectRoot();
   void createImageDirs();
 
-  void setSaveState(bool staat);
+  void setSaveHistory(bool staat);
 
   bool removeDir(const QString &dirName);
   QString trimCommand(QString lineData, QString command, QString modifier);
@@ -81,6 +86,7 @@ private:
   //Foreign Dependencies
   EventManager *localEventManager;
   void publishPagesChanged();
+  void publishSave();
 };
 
 #endif

@@ -22,6 +22,7 @@ void TextEditor::editorFontSetting(){
 
 void TextEditor::configureConnections(){
   connect(this, &QTextEdit::cursorPositionChanged, this, &TextEditor::cursorMoved);
+  connect(this, &QTextEdit::textChanged, this, &TextEditor::unSetSave);
 }
 
 void TextEditor::cursorMoved(){
@@ -33,6 +34,27 @@ void TextEditor::cursorMoved(){
   lineNo = tmpCur.blockNumber();
 
   syncCurrentWord(lineNo, position);
+}
+
+void TextEditor::syncText(QString inputText){
+  bool oldSaveStatus;
+
+  oldSaveStatus = getSaveStatus();
+  clear();
+  editorFontSetting();
+  setText(inputText);
+
+  if (oldSaveStatus){
+    enableSave();
+  }
+}
+
+void TextEditor::unSetSave(){
+  configureSave(false);
+}
+
+void TextEditor::enableSave(){
+  configureSave(true);
 }
 
 //Foreign dependents
@@ -64,4 +86,12 @@ void TextEditor::syncCurrentWord(int lineNo, int pos){
 
 void TextEditor::sendDrawEvent(){
   localControl->getPubSub()->publish("drawLines");
+}
+
+void TextEditor::configureSave(bool staat){
+  localControl->getProjectManager()->setSaveState(staat);
+}
+
+bool TextEditor::getSaveStatus(){
+  return localControl->getProjectManager()->getSaveState();
 }

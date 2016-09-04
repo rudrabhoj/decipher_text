@@ -9,7 +9,7 @@
 MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow(parent){
   localControl = ctrlData;
 
-  setWindowTitle(localControl->getSetting()->getAppName());
+  setWindowTitle(configurAppName());
   resize(1280, 720);
 
   centralWidget = new QWidget();
@@ -350,6 +350,10 @@ void MainWindow::listItemChanged(){
   }
 }
 
+void MainWindow::updateWindowName(){
+  setWindowTitle(configurAppName());
+}
+
 
 
 //Primary Dependence on Foreign Classes
@@ -401,12 +405,9 @@ void MainWindow::loadOCRedText(){
   currentPage = pageList->currentRow();
 
   if ( (*localPages)[currentPage].getOcrStatus() ){
-    editor->clear();
-    editor->editorFontSetting();
-    editor->setText((*localPages)[currentPage].getText());
+    editor->syncText( (*localPages)[currentPage].getText() );
   }else {
-    editor->editorFontSetting();
-    editor->clear();
+    editor->syncText("");
   }
 }
 
@@ -431,6 +432,10 @@ void MainWindow::setFontPreferences(){
   } else {
     std::cout << "Nothing selected!" << std::endl;
   }
+}
+
+QString MainWindow::configurAppName(){
+  return localControl->createName();
 }
 
 //Secondary Dependence on Foreign Classes
@@ -472,8 +477,10 @@ QString MainWindow::getFullPage(int index){
 void MainWindow::setSignalWrappers(){
   pageUpdateWrapper = [&](){syncNavbar();};
   listNavUpdateWrapper = [&](){ listItemChanged(); };
+  saveChanged = [&](){ updateWindowName(); };
 
   localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
+  localControl->getPubSub()->subscribe("saveChanged", &saveChanged);
   localControl->getPubSub()->subscribe("pageNavSelChanged", &listNavUpdateWrapper);
 }
 

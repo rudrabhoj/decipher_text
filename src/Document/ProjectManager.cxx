@@ -9,6 +9,10 @@
 #include <iostream>
 
 ProjectManager::ProjectManager(QString projDirName){
+  loadEmptyDefault(projDirName);
+}
+
+void ProjectManager::loadEmptyDefault(QString projDirName){
   QString designatedRoot;
 
   designatedRoot = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0] +
@@ -20,7 +24,9 @@ ProjectManager::ProjectManager(QString projDirName){
 
   createEmptyProject();
 
-  setSaveState(false);
+  //Should use direct set to avoid calling event manager too soon.
+  saveState = false;
+  saveHistory = false;
 
   setCurrentPageDefault();
 }
@@ -32,7 +38,22 @@ void ProjectManager::configureRoot(QString rootName, QString projDirName){
 }
 
 void ProjectManager::setSaveState(bool staat){
+  if(!getSaveHistory() && staat == true) setSaveHistory(true);
   saveState = staat;
+
+  publishSave();
+}
+
+bool ProjectManager::getSaveState(){
+  return saveState;
+}
+
+void ProjectManager::setSaveHistory(bool staat){
+  saveHistory = staat;
+}
+
+bool ProjectManager::getSaveHistory(){
+  return saveHistory;
 }
 
 void ProjectManager::verifyProjectRoot(){
@@ -107,6 +128,7 @@ void ProjectManager::commitPage(QString ofName, int index){
   dummyPage.setFileName(ofName);
 
   pageList.push_back(dummyPage);
+  setSaveState(false);
 }
 
 void ProjectManager::createEmptyProject(){
@@ -368,6 +390,8 @@ void ProjectManager::saveAs(QString saveName){
     rootUrl = getSaveRootDir(saveName);
 
     createSaveEnvironment(fName, containerDir, rootUrl);
+
+    setSaveState(true);
   }
 }
 
@@ -405,6 +429,7 @@ void ProjectManager::openProject(QString openName){
     publishPagesChanged();
 
     loadInterpretDtp(targetRoot, targetContainer, targetFile);
+    setSaveState(true);
   }
 }
 
@@ -669,4 +694,8 @@ void ProjectManager::injectEventManager(EventManager *eManager){
 
 void ProjectManager::publishPagesChanged(){
   localEventManager->publish("pagesChanged");
+}
+
+void ProjectManager::publishSave(){
+  localEventManager->publish("saveChanged");
 }

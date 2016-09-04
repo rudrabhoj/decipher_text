@@ -25,7 +25,7 @@ private:
   ControlData *localControl;
 
   std::function<void()> onOcrProcessed;
-  
+
   void allocateResources();
   void configureLabels();
   void configureProcessbars();
@@ -35,6 +35,7 @@ private:
 
   //Foreigners
   TesseractRecognize *tessRecog;
+  void unSetSave();
   void implementOcr(QString pageLink, int pageIndex);
   void configureConnections();
 };

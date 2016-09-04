@@ -26,6 +26,8 @@ public:
   EventManager *getPubSub();
   ProjectManager *getProjectManager();
   Language *getLanguage();
+
+  QString createName();
 };
 
 #endif

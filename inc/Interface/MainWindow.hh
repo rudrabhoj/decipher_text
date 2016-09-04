@@ -105,12 +105,15 @@ private:
   void showLoadDialog();
 
   void listItemChanged();
+  void updateWindowName();
 
 
   //Foreign Dependenices
   std::function<void()> pageUpdateWrapper;
   std::function<void()> listNavUpdateWrapper;
+  std::function<void()> saveChanged;
   void loadOCRedText();
+  QString configurAppName();
 
   void syncNavbar();
   void backupOldText();
