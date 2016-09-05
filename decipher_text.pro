@@ -21,6 +21,7 @@ SOURCES += src/Control/TesseractRecognize.cxx
 SOURCES += src/Document/Page.cxx
 SOURCES += src/Document/ProjectManager.cxx
 SOURCES += src/Interface/MainWindow.cxx
+SOURCES += src/Interface/Status.cxx
 SOURCES += src/Interface/Canvas.cxx
 SOURCES += src/Interface/TextEditor.cxx
 SOURCES += src/Interface/PageNav.cxx

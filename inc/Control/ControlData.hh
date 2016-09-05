@@ -14,6 +14,7 @@ private:
   void allocateResources();
   void deallocateResources();
   void configureProjectManager();
+  
 public:
   char **argv;
   int argc;
@@ -28,6 +29,7 @@ public:
   Language *getLanguage();
 
   QString createName();
+  QString getVersion();
 };
 
 #endif

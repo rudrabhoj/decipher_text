@@ -52,7 +52,11 @@ QString ControlData::createName(){
   if (!myProject->getSaveState()) myName += "*";
   myName += " - ";
   myName += preferences->getAppName();
-  myName += " 0.5-alpha";
+  myName += " " + getVersion();
 
   return myName;
+}
+
+QString ControlData::getVersion(){
+  return "0.5-alpha";
 }

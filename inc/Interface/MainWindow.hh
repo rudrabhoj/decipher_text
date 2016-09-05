@@ -19,6 +19,7 @@
 #include <QString>
 
 #include <Interface/Canvas.hh>
+#include <Interface/Status.hh>
 #include <Interface/PageNav.hh>
 #include <Interface/SettingDialog.hh>
 #include <Interface/RecognizeProcess.hh>
@@ -45,6 +46,7 @@ private:
   PageNav *pageList;
 
   Canvas *canvasObject;
+  Status *statusBar;
 
   QSplitter *mainSplitters;
 

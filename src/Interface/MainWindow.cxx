@@ -50,6 +50,7 @@ void MainWindow::allocateResources(){
   pageList = new PageNav(this, localControl);
   mainLayout = new QHBoxLayout();
   canvasObject = new Canvas(this, localControl);
+  statusBar = new Status(this, localControl);
   editor = new TextEditor(this, localControl);
   mainSplitters = new QSplitter();
 }
@@ -83,6 +84,7 @@ void MainWindow::configureSplitters(){
 void MainWindow::configureLayout(){
   mainLayout->addWidget(mainSplitters);
   centralWidget->setLayout(mainLayout);
+  setStatusBar(statusBar);
 }
 
 void MainWindow::configureAction(){

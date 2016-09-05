@@ -12,9 +12,6 @@ int main(int argc, char *argv[]){
   QApplication decipherApp(argc, argv);
   ControlData *globalControl = new ControlData(argc, argv);
 
-  std::cout << "Decipher Text 0.5-alpha" << std::endl;
-  //Setting *hello = new Setting();
-
   MainWindow *decipherWindow = new MainWindow(0, globalControl);
 
   rc = decipherApp.exec();
