@@ -22,6 +22,7 @@ public:
   void zoomIn();
   void zoomOut();
   void zoomNormal();
+  void cleanPage();
 
 private:
   ControlData *localControl;

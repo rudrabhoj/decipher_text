@@ -385,13 +385,9 @@ void ProjectManager::newProject(){
   setSaveHistory(false);
   setSaveFileName("Untitled Project");
   setSavedUrl(getWorkingDir() + "/" + "Untitled Project.dtp");
-
-  std::cout << "Publishing thing starts now" << std::endl;
-  std::cout << "Pub 1" << std::endl;
+  setCurrentPageDefault();
   publishPagesChanged();
-  std::cout << "Pub 2" << std::endl;
   publishSave();
-  std::cout << "Pub 3" << std::endl;
 }
 
 QString ProjectManager::getSaveRootDir(QString saveName){

@@ -351,13 +351,16 @@ void MainWindow::listItemChanged(){
   int i;
   i = pageList->currentRow();
 
-  backupOldText();
-
-  syncProjectManagerPageSelection(i);
-
   if (i >= 0){
+    backupOldText();
+
+    syncProjectManagerPageSelection(i);
+
     canvasObject->drawPage(getFullPage(i));
     loadOCRedText();
+  } else {
+    canvasObject->cleanPage();
+    editor->clear();
   }
 }
 

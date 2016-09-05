@@ -12,9 +12,9 @@ ControlData::~ControlData(){
 }
 
 void ControlData::allocateResources(){
+  pubSub = new EventManager();
   preferences = new Setting();
   language = new Language();
-  pubSub = new EventManager();
   myProject = new ProjectManager("Untitled Project");
 }
 

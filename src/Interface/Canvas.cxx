@@ -21,6 +21,10 @@ void Canvas::allocateResources(){
   underline = NULL;
 }
 
+void Canvas::cleanPage(){
+  displayController->clear();
+}
+
 void Canvas::configureSettings(QWidget *parent){
   configureParent(parent);
   configureController();
