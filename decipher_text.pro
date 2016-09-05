@@ -30,8 +30,6 @@ SOURCES += src/Interface/RecognizeProcess.cxx
 #Link
 LIBS += -llept
 LIBS += -ltesseract
-LIBS += -lboost_system-mt
-LIBS += -lboost_signals-mt
 
 QT += widgets
 QT += core
