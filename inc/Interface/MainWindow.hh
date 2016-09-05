@@ -100,6 +100,7 @@ private:
   void handleOpenProject();
   void handleSaveAsProject();
   void handleSaveProject();
+  void handleNewProject();
   void handleAddProject();
 
   void showLoadDialog();

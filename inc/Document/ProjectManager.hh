@@ -21,9 +21,14 @@ public:
   void setSaveState(bool staat);
   bool getSaveHistory();
   bool getSaveState();
+  void newProject();
 
   void saveAs(QString saveName);
+  void justSave();
   void openProject(QString openName);
+  void setSaveFileName(QString svName);
+  QString getSaveFileName();
+  QString getSavedUrl();
 
   //Foreign injections
   void injectEventManager(EventManager *eManager);
@@ -34,6 +39,8 @@ private:
   QList<Page> pageList;
   int currentPage;
   QString projectName;
+  QString saveFileName;
+  QString savedUrl;
   bool saveState;
   bool saveHistory;
 
@@ -43,11 +50,12 @@ private:
   void copyProject(QString newRoot, QString newDir);
   void addSinglePage(QString page);
   void commitPage(QString ofName, int index);
-  void createProjectFile(QString pName, QString projContents);
+  void createProjectFile(QString targetName, QString projContents);
   void verifyProjectRoot();
   void createImageDirs();
 
   void setSaveHistory(bool staat);
+  void setSavedUrl(QString urlData);
 
   bool removeDir(const QString &dirName);
   QString trimCommand(QString lineData, QString command, QString modifier);
@@ -70,7 +78,7 @@ private:
   void reConfigurePageRoot(QString rootUrl);
 
   QString dtpGetData();
-  void dtpGenerateFile(QString fName);
+  void dtpGenerateFile(QString fURL);
   QString dtpGetPageSemantics();
   QString dtpGenerateSemantics(int index);
   QString dtpGetPageNames();

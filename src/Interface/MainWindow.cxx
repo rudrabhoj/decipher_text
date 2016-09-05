@@ -184,8 +184,10 @@ void MainWindow::configureConnections(){
 }
 
 void MainWindow::configureMenuConnections(){
+  connect(newProject, &QAction::triggered, this, &MainWindow::handleNewProject);
   connect(openProject, &QAction::triggered, this, &MainWindow::handleOpenProject);
   connect(saveProject, &QAction::triggered, this, &MainWindow::handleSaveProject);
+  connect(saveAsProject, &QAction::triggered, this, &MainWindow::handleSaveAsProject);
   connect(addImages, &QAction::triggered, this, &MainWindow::handleAddProject);
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
@@ -254,7 +256,16 @@ void MainWindow::handleOpenProject(){
 }
 
 void MainWindow::handleSaveProject(){
-  handleSaveAsProject();
+  if(localControl->getProjectManager()->getSaveHistory()){
+    localControl->getProjectManager()->justSave();
+  } else {
+    handleSaveAsProject();
+  }
+
+}
+
+void MainWindow::handleNewProject(){
+  localControl->getProjectManager()->newProject();
 }
 
 void MainWindow::handleSaveAsProject(){

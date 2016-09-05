@@ -48,7 +48,7 @@ Language* ControlData::getLanguage(){
 QString ControlData::createName(){
   QString myName;
 
-  myName = myProject->getProjectName();
+  myName = myProject->getSaveFileName();
   if (!myProject->getSaveState()) myName += "*";
   myName += " - ";
   myName += preferences->getAppName();

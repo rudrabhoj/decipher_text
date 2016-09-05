@@ -29,6 +29,8 @@ void ProjectManager::loadEmptyDefault(QString projDirName){
   saveHistory = false;
 
   setCurrentPageDefault();
+  setSaveFileName("Untitled Project");
+  setSavedUrl(getWorkingDir() + "/" + "Untitled Project.dtp");
 }
 
 void ProjectManager::configureRoot(QString rootName, QString projDirName){
@@ -50,6 +52,14 @@ bool ProjectManager::getSaveState(){
 
 void ProjectManager::setSaveHistory(bool staat){
   saveHistory = staat;
+}
+
+void ProjectManager::setSavedUrl(QString urlData){
+  savedUrl = urlData;
+}
+
+QString ProjectManager::getSavedUrl(){
+  return savedUrl;
 }
 
 bool ProjectManager::getSaveHistory(){
@@ -144,7 +154,7 @@ void ProjectManager::createEmptyProject(){
   }
 
   targetDir.mkdir(targetName);
-  createProjectFile("/project.dtp", "");
+  createProjectFile(getWorkingDir() + "/Untitled Project.dtp", "");
 
   createImageDirs();
 }
@@ -162,11 +172,9 @@ void ProjectManager::createImageDirs(){
   dummyDir.mkdir(imageRootDir + "/thumbnail");
 }
 
-void ProjectManager::createProjectFile(QString pName, QString projContents){
-  QString targetName;
+void ProjectManager::createProjectFile(QString targetName, QString projContents){
   QFile pFile;
 
-  targetName = getWorkingDir() + pName;
 
   pFile.setFileName(targetName);
 
@@ -177,6 +185,14 @@ void ProjectManager::createProjectFile(QString pName, QString projContents){
 
     pFile.close();
   }
+}
+
+void ProjectManager::setSaveFileName(QString svName){
+  saveFileName = svName;
+}
+
+QString ProjectManager::getSaveFileName(){
+  return saveFileName;
 }
 
 bool ProjectManager::sanitizationNeeded(QString testUrl){
@@ -363,6 +379,21 @@ QString ProjectManager::getSaveContainer(QString saveName){
   return containerDir;
 }
 
+void ProjectManager::newProject(){
+  dtpDeleteAllPages();
+  setSaveState(false);
+  setSaveHistory(false);
+  setSaveFileName("Untitled Project");
+  setSavedUrl(getWorkingDir() + "/" + "Untitled Project.dtp");
+
+  std::cout << "Publishing thing starts now" << std::endl;
+  std::cout << "Pub 1" << std::endl;
+  publishPagesChanged();
+  std::cout << "Pub 2" << std::endl;
+  publishSave();
+  std::cout << "Pub 3" << std::endl;
+}
+
 QString ProjectManager::getSaveRootDir(QString saveName){
   int i, lim;
   QString rootUrl;
@@ -380,6 +411,10 @@ QString ProjectManager::getSaveRootDir(QString saveName){
   return rootUrl;
 }
 
+void ProjectManager::justSave(){
+  saveAs(getSavedUrl());
+}
+
 void ProjectManager::saveAs(QString saveName){
   QString fName, containerDir, rootUrl;
 
@@ -389,7 +424,7 @@ void ProjectManager::saveAs(QString saveName){
     containerDir = getSaveContainer(saveName);
     rootUrl = getSaveRootDir(saveName);
 
-    createSaveEnvironment(fName, containerDir, rootUrl);
+  createSaveEnvironment(fName, containerDir, rootUrl);
 
     setSaveState(true);
   }
@@ -414,9 +449,10 @@ QString ProjectManager::open2SaveUrlConvert(QString openName){
 }
 
 void ProjectManager::openProject(QString openName){
-  QString targetFile, targetRoot, targetContainer;
+  QString targetFile, targetRoot, targetContainer, originalOpenUrl;
+  originalOpenUrl = openName;
 
-  if (openName.trimmed() != ""){
+  if (openName.trimmed() != "" && openName != getSavedUrl()){
     if(sanitizationNeeded(openName)) openName = open2SaveUrlConvert(openName);
 
 
@@ -424,12 +460,16 @@ void ProjectManager::openProject(QString openName){
     targetContainer = getSaveContainer(openName);
     targetRoot = getSaveRootDir(openName);
 
-    configureRoot(targetRoot, targetContainer);
+    //configureRoot(targetRoot, targetContainer);
     dtpDeleteAllPages();
     publishPagesChanged();
+    removeDir( getWorkingDir() );
+    copyPath(targetRoot + "/" + targetContainer, getWorkingDir(), true);
 
     loadInterpretDtp(targetRoot, targetContainer, targetFile);
     setSaveState(true);
+    setSaveFileName(targetContainer);
+    setSavedUrl(originalOpenUrl);
   }
 }
 
@@ -488,16 +528,18 @@ void ProjectManager::reConfigurePageRoot(QString rootUrl){
 void ProjectManager::createSaveEnvironment(QString fName, QString containerDir, QString rootUrl){
   createSaveContainer(containerDir, rootUrl);
   createSaveImageEnvironment(containerDir, rootUrl);
-  configureRoot(rootUrl, containerDir);
-  reConfigurePageRoot(rootUrl + "/" + containerDir);
-  dtpGenerateFile(fName);
+  //configureRoot(rootUrl, containerDir);
+  //reConfigurePageRoot(rootUrl + "/" + containerDir);
+  dtpGenerateFile(rootUrl + "/" + containerDir + "/" + fName);
+  setSaveFileName(containerDir);
+  setSavedUrl(rootUrl + "/" + containerDir + "/" + fName);
 
   std::cout << "File: " << fName.toUtf8().data() << std::endl;
   std::cout << "Container: " << containerDir.toUtf8().data() << std::endl;
   std::cout << "Root URL: " << rootUrl.toUtf8().data() << std::endl;
 }
 
-void ProjectManager::dtpGenerateFile(QString fName){
+void ProjectManager::dtpGenerateFile(QString fURL){
   QString pgNames, pgSemantics, pgData, sendData;
 
   sendData = dtpGetPageNames();
@@ -506,7 +548,7 @@ void ProjectManager::dtpGenerateFile(QString fName){
   sendData += "\n\n";
   sendData += dtpGetData();
 
-  createProjectFile("/" + fName, sendData);
+  createProjectFile(fURL, sendData);
 }
 
 QString ProjectManager::dtpGetPageNames(){
