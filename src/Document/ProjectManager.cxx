@@ -217,11 +217,11 @@ QString ProjectManager::getImageMagickCommand(){
   QString binDir, path;
 
   binDir = QCoreApplication::applicationDirPath();
-  return "convert";
+
 
   #ifdef _WIN32
-  location1.setFile(binDir + "\\imagemagick\\convert.exe");
-  location2.setFile(binDir + "\\imagemagick\\convert.exe"); //For now single location on windows
+  location1.setFile(binDir + "\\convert.exe");
+  location2.setFile(binDir + "\\convert.exe"); //For now single location on windows
   #else
   location1.setFile("/usr/bin/convert");
   location2.setFile("/usr/local/bin/convert");
