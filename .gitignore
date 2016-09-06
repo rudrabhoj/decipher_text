@@ -65,6 +65,9 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 
+#Distribution Specific
+share/decipher_text/tessdata
+
 #Extras
 Makefile.Debug
 Makefile.Release
