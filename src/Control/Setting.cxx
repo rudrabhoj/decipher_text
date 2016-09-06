@@ -223,7 +223,8 @@ void Setting::setResourceDefaults(){
 }
 
 void Setting::setTessdataDefault(){
-  QString path;
+  QString path, winPath;
+  winPath = QCoreApplication::applicationDirPath() + "/../share/decipher_text/tessdata";
 
   if (QDir("/usr/share/tessdata").exists()){
     path = "/usr/share";
@@ -234,7 +235,9 @@ void Setting::setTessdataDefault(){
   }
 
   #ifdef _WIN32
-    if (QDir("C:\\Tesseract-OCR\\tessdata").exists()){
+    if (QDir(winPath).exists()){
+      path = winPath + "/..";
+    } else if (QDir("C:\\Tesseract-OCR\\tessdata").exists()){
       path = "C:\\Tesseract-OCR";
     } else if(QDir("C:\\Tesseract\\tessdata").exists()){
       path = "C:\\Tesseract";
