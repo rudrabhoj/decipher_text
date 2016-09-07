@@ -123,6 +123,7 @@ private:
   void setSignalWrappers();
   void sendEnableLangRequest(QString lang);
   void sendDisableLangRequest(QString lang);
+  QString getAppIconPath();
 
   void loadLanguages();
   void syncProjectManagerPageSelection(int i);

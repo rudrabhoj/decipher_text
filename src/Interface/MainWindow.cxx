@@ -11,6 +11,7 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
 
   setWindowTitle(configurAppName());
   resize(1280, 720);
+  this->setWindowIcon( QIcon(getAppIconPath()) );
 
   centralWidget = new QWidget();
   this->setCentralWidget(centralWidget);
@@ -452,6 +453,10 @@ void MainWindow::setFontPreferences(){
 
 QString MainWindow::configurAppName(){
   return localControl->createName();
+}
+
+QString MainWindow::getAppIconPath(){
+  return localControl->getSetting()->getIconDir() + "/app_icon.png";
 }
 
 //Secondary Dependence on Foreign Classes
