@@ -37,3 +37,8 @@ QT += core
 
 #CONFIG += c++11
 CONFIG += console
+
+#Windows specific
+win32 {
+  RC_FILE = windowsSpecific.rc
+}
