@@ -20,3 +20,6 @@ int main(int argc, char *argv[]){
 
   return rc;
 }
+
+//Things to remember.
+//1. BeOS/Haiku support: __HAIKU_ARCH_32_BIT || __HAIKU_ARCH_64_BIT
