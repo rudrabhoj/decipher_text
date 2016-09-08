@@ -33,6 +33,7 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
   configureMenu();
 
   configureSettingWindow();
+  configureAboutWindow();
 
   configureRProcessDialog();
 
@@ -177,6 +178,10 @@ void MainWindow::configureSettingWindow(){
   settingWindow = new SettingDialog(this, localControl);
 }
 
+void MainWindow::configureAboutWindow(){
+  aboutWindow = new About(this, localControl);
+}
+
 void MainWindow::configureRProcessDialog(){
   rProcessDialog = new RecognizeProcess(this, localControl);
 }
@@ -199,6 +204,7 @@ void MainWindow::configureMenuConnections(){
   connect(fontSettings, &QAction::triggered, this, &MainWindow::setFontPreferences);
 
   connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
+  connect(about, &QAction::triggered, this, [&](){aboutWindow->displayDialog();});
   connect(orcNow, &QAction::triggered, this, &MainWindow::handleRecognizeNow);
 
   configureLanguageConnections();

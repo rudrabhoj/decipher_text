@@ -336,6 +336,15 @@ QString Setting::getIconDir(){
   return iconDir;
 }
 
+QString Setting::getAboutUrl(){
+  QString targetFolder;
+
+  targetFolder = QCoreApplication::applicationDirPath();
+  targetFolder += "/../share/decipher_text/ABOUT";
+
+  return targetFolder;
+}
+
 //Setters
 void Setting::setTesseractPath(QString path){
   tesseractPath = path;

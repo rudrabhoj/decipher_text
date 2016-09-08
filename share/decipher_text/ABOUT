@@ -1,0 +1,22 @@
+                                                                                                                  Decipher Text
+                                                                                                                      VERSION_NO
+                                                                               Copyrights(c) Agnis Technology. All Rights Reserved.
+                                                                                               Available under 3 Claue BSD License.
+
+Free and open source OCR program based upon tesseract_ocr, created with Qt5. It was created to solve the issue of the inexistence of any good professional OCR front-end for the tesseract OCR. Not a single one which has all the features which the author (legal: Harshvardhan Singh Bhati) required and worked on all the platorms he uses including but not limited to Windows, Linux and FreeBSD.
+
+Defining features of the first stable version are expected to be following:
+I.     Better proofreading. Position of cursor in the text should be highlighted in the image. [X]
+II.    Easy to manage Project files. Creation, Loading and Saving. [X]
+III.   Efficient handling of memory. [Partially done]
+IV.    Recognition support for the multi-lingual text. [X]
+V.     Multi-core recognition. [ ]
+VI.    Recognize all pages with one button. [ ]
+VII.  Copy single page or entire project text with removal of extra line breaks [ ]
+VIII. Built-in image manipulation support to make OCR process simpler [ ]
+IX.    Importing multipage PDF files. [ ]
+X.     Easy one click updates. [ ]
+XI.    UI available in multiple languages [ ]
+XI.    Compilable on FreeBSD, Windows, Linux and OS X. Possibly even Haiku. [x]
+
+While lot of work had been done in the current version: VERSION_NO, we have lot more to do. The overall goal is also to keep the code good-looking and smooth. Major refactoring shall be done when we move from beta to stable version.

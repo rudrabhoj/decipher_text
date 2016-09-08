@@ -3,7 +3,7 @@
 
 SettingDialog::SettingDialog(QWidget *parent, ControlData *ctrlData) : QDialog(parent){
   localControl = ctrlData;
-  
+
   generalSetting();
   resourceAcquisition();
   setupButtons();
@@ -19,7 +19,7 @@ void SettingDialog::resourceAcquisition(){
 
 void SettingDialog::generalSetting(){
   setModal(true);
-  setWindowTitle("Settings - Decipher Text");
+  setWindowTitle("Settings");
   resize(840, 420);
 }
 

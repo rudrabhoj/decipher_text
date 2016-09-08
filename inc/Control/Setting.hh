@@ -35,7 +35,7 @@ private:
   void setLanguageDefaults();
   void setInterfaceDefaults();
   void setResourceDefaults();
-  
+
   bool configExists();
   QString getConfigDir();
   QString getConfigFile();
@@ -64,6 +64,8 @@ public:
 
   QString getDecipherDataPath();
   QString getIconDir();
+
+  QString getAboutUrl();
 
   //Setters
   void setTesseractPath(QString path);

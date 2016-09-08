@@ -27,6 +27,7 @@ SOURCES += src/Interface/TextEditor.cxx
 SOURCES += src/Interface/PageNav.cxx
 SOURCES += src/Interface/SettingDialog.cxx
 SOURCES += src/Interface/RecognizeProcess.cxx
+SOURCES += src/Interface/About.cxx
 
 #Link
 LIBS += -llept

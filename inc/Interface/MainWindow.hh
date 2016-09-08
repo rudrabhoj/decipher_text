@@ -22,6 +22,7 @@
 #include <Interface/Status.hh>
 #include <Interface/PageNav.hh>
 #include <Interface/SettingDialog.hh>
+#include <Interface/About.hh>
 #include <Interface/RecognizeProcess.hh>
 
 
@@ -53,6 +54,7 @@ private:
   TextEditor *editor;
 
   SettingDialog *settingWindow;
+  About *aboutWindow;
   RecognizeProcess *rProcessDialog;
 
   QAction *newProject;
@@ -89,6 +91,7 @@ private:
   void configureConnections();
   void configureLanguageConnections();
   void configureSettingWindow();
+  void configureAboutWindow();
   void configureRProcessDialog();
   void configureMenuConnections();
   void configureWidgetConnections();
