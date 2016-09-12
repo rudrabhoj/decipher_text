@@ -5,20 +5,30 @@
 #include <QVector>
 #include <QList>
 
+#include <thread>
+#include <mutex>
+
 #include <Document/wordUnit.hh>
+#include <Document/TessRecognizeBox.hh>
 #include <Control/ControlData.hh>
 #include <Document/Page.hh>
+#include <vector>
 
 class TesseractRecognize{
 
 public:
   TesseractRecognize(ControlData *ctrData);
-  void recognize(QString pageLink, int pageIndex);
+  void recognize(QString pageLink, int pageIndex, bool recAllPages);
 
 private:
   ControlData *localControl;
-  int pageNumber;
   QVector<wordUnit> wordList;
+  int nextPage;
+  int pageThreads;
+  std::vector<std::thread> executionList;
+  QList<TessRecognizeBox> tessRecList;
+  std::mutex threadNumLock;
+  QList<int> threadPattern;
 
   int localLine;
   int localWord;
@@ -30,18 +40,36 @@ private:
   void resetWord();
   void resetLine();
 
-  void doRecognize(QString page);
+  void singlePageOcr(QString pageLink, int pageIndex);
+  void multicoreBatchOcr();
+  void implementOCR(QString pageLink, int pageIndex, int pageNo);
+  void analyzePage(TessRecognizeBox *ocrUnit, int pageNo);
+  void recDaemon(TessRecognizeBox *ocrUnit, QString page);
+  void waitThreadsToFinish();
+
   void pushNewLine();
   void appendWord(char* inputWord, int a, int b, int c, int d, int lineNo, int wordNo);
+  void clearWord();
 
-  void pushToPage();
-  void sendDoneMessge();
+  void createThreadPattern(int noPages);
+  void reducePgThreads();
+  void setPgThreads(int threadNum);
+  int getPgThreads();
+  void allocateOcrDT();
+  void createThreads(int lim);
+  void setNextPage(int val);
+  int getNextPage();
 
 
   //Foreign Dependents
   QList<Page> *getStoredPages();
   char* getLanguageSettings();
   char* getTessDataSettings();
+  QString getImageAt(int index);
+
+  int getPagesLim();
+  void pushToPage(int pageNo);
+  void sendDoneMessge();
 };
 
 #endif

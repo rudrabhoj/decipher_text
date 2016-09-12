@@ -20,6 +20,7 @@ SOURCES += src/Control/EventManager.cxx
 SOURCES += src/Control/TesseractRecognize.cxx
 SOURCES += src/Document/Page.cxx
 SOURCES += src/Document/ProjectManager.cxx
+SOURCES += src/Document/TessRecognizeBox.cxx
 SOURCES += src/Interface/MainWindow.cxx
 SOURCES += src/Interface/Status.cxx
 SOURCES += src/Interface/Canvas.cxx

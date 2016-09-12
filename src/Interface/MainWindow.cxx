@@ -100,7 +100,8 @@ void MainWindow::configureAction(){
   QString zoomOutString = "&Zoom Out";
   QString zoomNormalString = "&Zoom Normal";
   QString fontSettingsString = "&Font Preferences";
-  QString orcNowString = "&OCR";
+  QString orcNowString = "&OCR Current Page";
+  QString orcAllString = "&OCR All Pages";
   QString prefSettingsString = "&Settings";
   QString aboutString = "&About";
   QString documentationString = "&Documentation";
@@ -114,6 +115,7 @@ void MainWindow::configureAction(){
   QPixmap zoomOutPix(iconPath + "/zoom_out.png");
   QPixmap zoomNormalPix(iconPath + "/zoom_normal.png");
   QPixmap ocrNowPix(iconPath + "/ocr.png");
+  QPixmap ocrAllPix(iconPath + "/ocrAll.png");
   QPixmap settingPix(iconPath + "/setting.png");
 
   newProject = new QAction(QIcon(newPix), newProjectString, this);
@@ -144,6 +146,9 @@ void MainWindow::configureAction(){
 
   orcNow = new QAction(QIcon(ocrNowPix), orcNowString, this);
   orcNow->setIconVisibleInMenu(false);
+
+  orcAll = new QAction(QIcon(ocrAllPix), orcAllString, this);
+  orcAll->setIconVisibleInMenu(false);
 
   fontSettings = new QAction(fontSettingsString, this);
   fontSettings->setIconVisibleInMenu(false);
@@ -205,7 +210,8 @@ void MainWindow::configureMenuConnections(){
 
   connect(prefSettings, &QAction::triggered, this, [&](){settingWindow->displayDialog();});
   connect(about, &QAction::triggered, this, [&](){aboutWindow->displayDialog();});
-  connect(orcNow, &QAction::triggered, this, &MainWindow::handleRecognizeNow);
+  connect(orcNow, &QAction::triggered, this, [&](){handleRecognizeNow(false);});
+  connect(orcAll, &QAction::triggered, this, [&](){handleRecognizeNow(true);});
 
   configureLanguageConnections();
 }
@@ -225,12 +231,12 @@ void MainWindow::configureWidgetConnections(){
 
 
 
-void MainWindow::handleRecognizeNow(){
+void MainWindow::handleRecognizeNow(bool ifAllPages){
   int i;
   i = pageList->currentRow();
 
   if (i > -1){
-    rProcessDialog->recognizeNow(getFullPage(pageList->currentRow()), pageList->currentRow());
+    rProcessDialog->recognizeNow(getFullPage(pageList->currentRow()), pageList->currentRow(), ifAllPages);
     loadOCRedText();
   }
 }
@@ -311,6 +317,7 @@ void MainWindow::configureMenu(){
 
   tools = this->menuBar()->addMenu(toolsString);
   tools->addAction(orcNow);
+  tools->addAction(orcAll);
   tools->addAction(fontSettings);
   tools->addAction(prefSettings);
 
@@ -352,6 +359,7 @@ void MainWindow::configureToolbar(){
   mainToolbar->addSeparator();
 
   mainToolbar->addAction(orcNow);
+  mainToolbar->addAction(orcAll);
   mainToolbar->addAction(prefSettings);
 }
 

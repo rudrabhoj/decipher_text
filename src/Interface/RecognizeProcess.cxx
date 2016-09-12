@@ -50,10 +50,10 @@ void RecognizeProcess::displayDialog(){
   show();
 }
 
-void RecognizeProcess::recognizeNow(QString pageLink, int pageIndex){
+void RecognizeProcess::recognizeNow(QString pageLink, int pageIndex, bool recAllPages){
   displayDialog();
 
-  implementOcr(pageLink, pageIndex);
+  implementOcr(pageLink, pageIndex, recAllPages);
 }
 
 void RecognizeProcess::closeDialog(){
@@ -65,9 +65,9 @@ void RecognizeProcess::closeDialog(){
 
 //Primary Foreign Dependents
 
-void RecognizeProcess::implementOcr(QString pageLink, int pageIndex){
+void RecognizeProcess::implementOcr(QString pageLink, int pageIndex, bool recAllPages){
   TesseractRecognize recognizeDaemon(localControl);
-  recognizeDaemon.recognize(pageLink, pageIndex);
+  recognizeDaemon.recognize(pageLink, pageIndex, recAllPages);
 }
 
 void RecognizeProcess::unSetSave(){

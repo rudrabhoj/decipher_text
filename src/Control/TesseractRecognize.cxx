@@ -3,89 +3,141 @@
 #include <iostream>
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
+#include <algorithm>
+#include <QApplication>
 
 TesseractRecognize::TesseractRecognize(ControlData *ctrData){
   localControl = ctrData;
 }
 
-void TesseractRecognize::recognize(QString pageLink, int pageIndex){
-  pageNumber = pageIndex;
-
-  doRecognize(pageLink);
+void TesseractRecognize::recognize(QString pageLink, int pageIndex, bool recAllPages){
+  if(recAllPages){
+    multicoreBatchOcr();
+  } else{
+    singlePageOcr(pageLink, pageIndex);
+  }
 }
 
-void TesseractRecognize::doRecognize(QString page){
-  Pix *inputImage;
+void TesseractRecognize::multicoreBatchOcr(){
+  int tdPatternLim, analyzeLim, i, j;
+
+  setNextPage(0);
+  createThreadPattern(getPagesLim());
+  allocateOcrDT();
+
+  tdPatternLim = threadPattern.length();
+
+  //std::cout << tdPatternLim << std::endl;
+
+  for(i = 0; i < tdPatternLim; i++){
+    createThreads(threadPattern[i]);
+    waitThreadsToFinish();
+  }
+
+  analyzeLim = tessRecList.length();
+
+  for(i = 0; i < analyzeLim; i++) analyzePage(&tessRecList[i], i);
+
+  sendDoneMessge();
+}
+
+void TesseractRecognize::singlePageOcr(QString pageLink, int pageIndex){
+  TessRecognizeBox ocrNode;
+
+  setPgThreads(1); //single page to OCR
+  std::thread recThread(TesseractRecognize::recDaemon, this, &ocrNode, pageLink);
+  recThread.detach();
+
+  waitThreadsToFinish();
+
+  analyzePage(&ocrNode, pageIndex);
+  sendDoneMessge();
+}
+
+void TesseractRecognize::waitThreadsToFinish(){
+  while( getPgThreads() > 0 ){
+    qApp->processEvents();
+  }
+}
+
+void TesseractRecognize::createThreads(int lim){
+  int j, x;
+
+  setPgThreads(lim);
+  executionList.clear();
+  x = getNextPage();
+
+  for(j = 0; j < lim; j++){
+    int currentCount = x + j;
+    TessRecognizeBox *currentTessRec = &(tessRecList[currentCount]);
+    QString currentImg =  getImageAt(currentCount);
+
+    executionList.push_back(std::thread(TesseractRecognize::recDaemon, this, currentTessRec, currentImg));
+  }
+
+  std::for_each(executionList.begin(), executionList.end(), [](std::thread &t){
+    t.detach();
+  });
+
+  setNextPage( x + lim );
+
+  std::cout << "Next Page:" << getNextPage() << std::endl;
+}
+
+void TesseractRecognize::analyzePage(TessRecognizeBox *ocrUnit, int pageNo){
   char *word;
-  char languageArg[425];
-  char tessDataPath[1024];
   int x1, y1, x2, y2;
-  tesseract::TessBaseAPI process;
-  tesseract::ResultIterator *voyager;
-  tesseract::PageIteratorLevel wordLevel;
 
   resetWord();
   resetLine();
 
-  /* Would be helpful to actually delete the dynamically allocated
-   * string we get from getLanguageSettings,
-   * but horrible errors I got while convertng QString to char *
-   * safely, would want me to look at it later.
-   * few bytes a session would leak otherwise.
-   */
-  strcpy(languageArg, getLanguageSettings());
-  strcpy(tessDataPath, getTessDataSettings());
+  ocrUnit->voyager = ocrUnit->process.GetIterator();
+  ocrUnit->wordLevel = tesseract::RIL_WORD;
 
-  inputImage = pixRead(page.toUtf8().data());
-
-  if (inputImage == 0){
-    //Implement error handling
-  }
-
-  std::cout << "Buffer at function = " << languageArg << std::endl;
-
-  if (process.Init(tessDataPath, languageArg )){
-    //Again, handle error here
-  }
-
-  process.SetImage(inputImage);
-  process.Recognize(0);
-
-  voyager = process.GetIterator();
-  wordLevel = tesseract::RIL_WORD;
-
-  if(voyager != 0){
+  if(ocrUnit->voyager != 0){
     do{
-      word = voyager->GetUTF8Text(wordLevel);
-      if (voyager->IsAtBeginningOf(tesseract::RIL_TEXTLINE) ) pushNewLine();
-      if (voyager->IsAtBeginningOf(tesseract::RIL_PARA)) pushNewLine();
+      word = ocrUnit->voyager->GetUTF8Text(ocrUnit->wordLevel);
+      if (ocrUnit->voyager->IsAtBeginningOf(tesseract::RIL_TEXTLINE) ) pushNewLine();
+      if (ocrUnit->voyager->IsAtBeginningOf(tesseract::RIL_PARA)) pushNewLine();
 
-      voyager->BoundingBox(wordLevel, &x1, &y1, &x2, &y2);
+      ocrUnit->voyager->BoundingBox(ocrUnit->wordLevel, &x1, &y1, &x2, &y2);
 
       appendWord(word, x1, y1, x2, y2, getLocalLine(), getLocalWord());
 
       nextWord();
       delete []word;
 
-    } while(voyager->Next(wordLevel));
+    } while(ocrUnit->voyager->Next(ocrUnit->wordLevel));
   }
 
-  delete voyager;
-  process.End();
-  pixDestroy(&inputImage);
-
-
-  std::cout << "Doing Recognizing " << page.toUtf8().data() << std::endl;
-
-  pushToPage();
-
-  resetWord();
-  resetLine();
-
-  sendDoneMessge();
+  ocrUnit->destroyProcess();
+  pushToPage(pageNo);
+  clearWord();
 }
 
+void TesseractRecognize::recDaemon(TessRecognizeBox *ocrUnit, QString page){
+  char languageArg[425];
+  char tessDataPath[1024];
 
+  strcpy(languageArg, getLanguageSettings());
+  strcpy(tessDataPath, getTessDataSettings());
+
+  ocrUnit->inputImage = pixRead(page.toUtf8().data());
+
+  if (ocrUnit->inputImage == 0){
+    //Implement error handling
+  }
+
+  if (ocrUnit->process.Init(tessDataPath, languageArg )){
+    //Again, handle error here
+  }
+
+  ocrUnit->process.SetImage(ocrUnit->inputImage);
+  ocrUnit->process.Recognize(0);
+  ocrUnit->destroyImage();
+
+  reducePgThreads();
+}
 
 int TesseractRecognize::getLocalLine(){
   return localLine;
@@ -142,6 +194,30 @@ void TesseractRecognize::appendWord(char* inputWord, int a, int b, int c, int d,
   wordList.push_back(tmpUnit);
 }
 
+void TesseractRecognize::clearWord(){
+  wordList.clear();
+}
+
+void TesseractRecognize::allocateOcrDT(){
+  int i, lim;
+
+  tessRecList.clear();
+  lim = getPagesLim();
+
+  for (i = 0; i < lim; i++){
+    TessRecognizeBox dummyBox;
+    tessRecList.push_back(dummyBox);
+  }
+}
+
+void TesseractRecognize::setNextPage(int val){
+  nextPage = val;
+}
+
+int TesseractRecognize::getNextPage(){
+  return nextPage;
+}
+
 /*void TesseractRecognize::displayOutput(){
   int i, lim;
 
@@ -167,7 +243,7 @@ char* TesseractRecognize::getLanguageSettings(){
   QByteArray array = lang.toLocal8Bit();
   strcpy(buffer, array.data());
 
-  std::cout << "Buffer at origin = " << buffer << std::endl;
+  //std::cout << "Buffer at origin = " << buffer << std::endl;
 
   return buffer;
 }
@@ -181,18 +257,62 @@ char* TesseractRecognize::getTessDataSettings(){
   QByteArray array = tessData.toLocal8Bit();
   strcpy(buffer, array.data());
 
-  std::cout << "TessData Path = " << buffer << std::endl;
+  //std::cout << "TessData Path = " << buffer << std::endl;
 
   return buffer;
 }
 
+void TesseractRecognize::createThreadPattern(int noPages){
+  int threadLim = std::thread::hardware_concurrency();
+  int pagesLeft;
+
+  threadPattern.clear(); //Empty previous calculations
+  pagesLeft = noPages;
+
+  while(true){
+    if (pagesLeft <= threadLim){
+      threadPattern.push_back(pagesLeft);
+      break;
+    } else {
+      threadPattern.push_back(threadLim);
+      pagesLeft -= threadLim;
+    }
+  }
+}
+
+void TesseractRecognize::setPgThreads(int threadNum){
+  pageThreads = threadNum;
+}
+
+int TesseractRecognize::getPgThreads(){
+  return pageThreads;
+}
+
+void TesseractRecognize::reducePgThreads(){
+  std::lock_guard<std::mutex> lg(threadNumLock);
+  pageThreads -= 1;
+}
+
 //Secondary Foreign Dependents
-void TesseractRecognize::pushToPage(){
+int TesseractRecognize::getPagesLim(){
   QList<Page> *localPageList;
   localPageList = getStoredPages();
-  (*localPageList)[pageNumber].importOcr(wordList);
+  return (*localPageList).length();
+}
+
+void TesseractRecognize::pushToPage(int pageNo){
+  QList<Page> *localPageList;
+  localPageList = getStoredPages();
+  (*localPageList)[pageNo].importOcr(wordList);
 }
 
 void TesseractRecognize::sendDoneMessge(){
   localControl->getPubSub()->publish("ocrProcessed");
+}
+
+QString TesseractRecognize::getImageAt(int index){
+  QList<Page> *localPageList;
+  localPageList = getStoredPages();
+
+  return (*localPageList)[index].getFullDisplayLink();
 }

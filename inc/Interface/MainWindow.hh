@@ -67,6 +67,7 @@ private:
   QAction *zoomOut;
   QAction *zoomNormal;
   QAction *orcNow;
+  QAction *orcAll;
   QAction *fontSettings;
   QAction *prefSettings;
   QAction *about;
@@ -99,7 +100,7 @@ private:
   void configureToolbar();
 
   QString defaultOCRLanguage();
-  void handleRecognizeNow();
+  void handleRecognizeNow(bool ifAllPages);
   void handleLanguageChange();
 
   void handleOpenProject();

@@ -15,7 +15,7 @@
 class RecognizeProcess : public QDialog {
 public:
   RecognizeProcess(QWidget *parent, ControlData *ctrlData);
-  void recognizeNow(QString pageLink, int pageIndex);
+  void recognizeNow(QString pageLink, int pageIndex, bool recAllPages);
 
 private:
   QVBoxLayout *centralLayout;
@@ -36,7 +36,7 @@ private:
   //Foreigners
   TesseractRecognize *tessRecog;
   void unSetSave();
-  void implementOcr(QString pageLink, int pageIndex);
+  void implementOcr(QString pageLink, int pageIndex, bool recAllPages);
   void configureConnections();
 };
 
