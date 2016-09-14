@@ -45,7 +45,7 @@ void TesseractRecognize::singlePageOcr(QString pageLink, int pageIndex){
   TessRecognizeBox ocrNode;
 
   setPgThreads(1); //single page to OCR
-  std::thread recThread(TesseractRecognize::recDaemon, this, &ocrNode, pageLink);
+  std::thread recThread(&TesseractRecognize::recDaemon, this, &ocrNode, pageLink);
   recThread.detach();
 
   waitThreadsToFinish();
@@ -72,7 +72,7 @@ void TesseractRecognize::createThreads(int lim){
     TessRecognizeBox *currentTessRec = &(tessRecList[currentCount]);
     QString currentImg =  getImageAt(currentCount);
 
-    executionList.push_back(std::thread(TesseractRecognize::recDaemon, this, currentTessRec, currentImg));
+    executionList.push_back(std::thread(&TesseractRecognize::recDaemon, this, currentTessRec, currentImg));
   }
 
   std::for_each(executionList.begin(), executionList.end(), [](std::thread &t){
