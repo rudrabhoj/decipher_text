@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QList>
 #include <QProgressBar>
 #include <Control/TesseractRecognize.hh>
 
@@ -19,8 +20,9 @@ public:
 
 private:
   QVBoxLayout *centralLayout;
-  QLabel *description;
+  QLabel *mainText;
   QProgressBar *progress;
+  QList<QProgressBar*> subBars;
 
   ControlData *localControl;
 
@@ -32,12 +34,16 @@ private:
   void configureLayout();
   void displayDialog();
   void closeDialog();
+  int getTotalCores();
+  void reconfigureProcessbars(bool manyPages);
 
   //Foreigners
   TesseractRecognize *tessRecog;
   void unSetSave();
   void implementOcr(QString pageLink, int pageIndex, bool recAllPages);
   void configureConnections();
+  int getPagesLen();
+  void updateProcessStatus(int staat); //Foreigners call him
 };
 
 #endif

@@ -2,9 +2,9 @@
 
 #include <iostream>
 #include <tesseract/baseapi.h>
-#include <leptonica/allheaders.h>
 #include <algorithm>
 #include <QApplication>
+#include <QImage>
 
 TesseractRecognize::TesseractRecognize(ControlData *ctrData){
   localControl = ctrData;
@@ -16,6 +16,10 @@ void TesseractRecognize::recognize(QString pageLink, int pageIndex, bool recAllP
   } else{
     singlePageOcr(pageLink, pageIndex);
   }
+}
+
+void TesseractRecognize::setUpdateConnector(std::function<void(int)> *fooInput){
+  processUpdateConnector = fooInput;
 }
 
 void TesseractRecognize::multicoreBatchOcr(){
@@ -57,6 +61,8 @@ void TesseractRecognize::singlePageOcr(QString pageLink, int pageIndex){
 void TesseractRecognize::waitThreadsToFinish(){
   while( getPgThreads() > 0 ){
     qApp->processEvents();
+
+    (*processUpdateConnector)(getNextPage());
   }
 }
 
@@ -91,7 +97,7 @@ void TesseractRecognize::analyzePage(TessRecognizeBox *ocrUnit, int pageNo){
   resetWord();
   resetLine();
 
-  ocrUnit->voyager = ocrUnit->process.GetIterator();
+  ocrUnit->voyager = ocrUnit->process->GetIterator();
   ocrUnit->wordLevel = tesseract::RIL_WORD;
 
   if(ocrUnit->voyager != 0){
@@ -106,6 +112,7 @@ void TesseractRecognize::analyzePage(TessRecognizeBox *ocrUnit, int pageNo){
 
       nextWord();
       delete []word;
+      word = nullptr;
 
     } while(ocrUnit->voyager->Next(ocrUnit->wordLevel));
   }
@@ -122,19 +129,18 @@ void TesseractRecognize::recDaemon(TessRecognizeBox *ocrUnit, QString page){
   strcpy(languageArg, getLanguageSettings());
   strcpy(tessDataPath, getTessDataSettings());
 
-  ocrUnit->inputImage = pixRead(page.toUtf8().data());
+  //ocrUnit->inputImage = pixRead(page.toUtf8().data());
 
-  if (ocrUnit->inputImage == 0){
-    //Implement error handling
-  }
+  ocrUnit->inputImage = new QImage(page); //pixRead(page.toUtf8().data());
 
-  if (ocrUnit->process.Init(tessDataPath, languageArg )){
+
+  if (ocrUnit->process->Init(tessDataPath, languageArg )){
     //Again, handle error here
   }
 
-  ocrUnit->process.SetImage(ocrUnit->inputImage);
-  ocrUnit->process.Recognize(0);
-  ocrUnit->destroyImage();
+  ocrUnit->process->SetImage(ocrUnit->inputImage->bits(), ocrUnit->inputImage->width(),
+                ocrUnit->inputImage->height(), 4, ocrUnit->inputImage->bytesPerLine());
+  ocrUnit->process->Recognize(0);
 
   reducePgThreads();
 }

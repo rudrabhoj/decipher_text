@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <mutex>
+#include <functional>
 
 #include <Document/wordUnit.hh>
 #include <Document/TessRecognizeBox.hh>
@@ -19,6 +20,7 @@ class TesseractRecognize{
 public:
   TesseractRecognize(ControlData *ctrData);
   void recognize(QString pageLink, int pageIndex, bool recAllPages);
+  void setUpdateConnector(std::function<void(int)> *fooInput);
 
 private:
   ControlData *localControl;
@@ -29,6 +31,7 @@ private:
   QList<TessRecognizeBox> tessRecList;
   std::mutex threadNumLock;
   QList<int> threadPattern;
+  std::function<void(int)> *processUpdateConnector;
 
   int localLine;
   int localWord;
