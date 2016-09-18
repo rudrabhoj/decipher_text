@@ -11,7 +11,7 @@ BEGIN
       BLOCK "040904E4"
         BEGIN
           VALUE "CompanyName",        "Agnis Technology"
-          VALUE "FileDescription",    "Open source Optical Character Recognition software based upon tesseract_ocr using Qt5."
+          VALUE "FileDescription",    "Decipher Text: Open source Optical Character Recognition software based upon tesseract_ocr using Qt5."
           VALUE "FileVersion",        "0.9.0.0\0"
           VALUE "InternalName",       "Decipher Text"
           VALUE "LegalCopyright",     "Copyright (c) 2016 Agnis Technology"
