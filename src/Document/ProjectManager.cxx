@@ -6,6 +6,7 @@
 #include <QStandardPaths>
 #include <QCoreApplication>
 #include <QFileInfo>
+#include <QProcess>
 #include <iostream>
 
 ProjectManager::ProjectManager(QString projDirName){
@@ -121,12 +122,12 @@ void ProjectManager::addSinglePage(QString page){
 
   QFile::copy(page, imagesFull + "/" + ofName);
 
-  commandExe = getImageMagickCommand() + " ";
+  commandExe =  "\"" + getImageMagickCommand() + "\" ";
   commandExe += "\"" + imagesFull + "/" + ofName + "\"";
   commandExe += " -thumbnail 104x148! ";
   commandExe += "\"" + imagesThumb + "/" + ofName + "\"";
 
-  system(commandExe.toUtf8().data());
+  QProcess::execute(commandExe);
 
   futurePageIndex = pageList.length();
 
