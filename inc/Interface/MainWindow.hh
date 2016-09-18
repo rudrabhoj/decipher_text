@@ -24,6 +24,7 @@
 #include <Interface/SettingDialog.hh>
 #include <Interface/About.hh>
 #include <Interface/RecognizeProcess.hh>
+#include <Interface/ReplaceDialog.hh>
 
 
 #include <Control/ControlData.hh>
@@ -54,6 +55,7 @@ private:
   TextEditor *editor;
 
   SettingDialog *settingWindow;
+  ReplaceDialog *replaceDialog;
   About *aboutWindow;
   RecognizeProcess *rProcessDialog;
 
@@ -92,6 +94,7 @@ private:
   void configureConnections();
   void configureLanguageConnections();
   void configureSettingWindow();
+  void configureReplaceDialog();
   void configureAboutWindow();
   void configureRProcessDialog();
   void configureMenuConnections();

@@ -33,6 +33,8 @@ MainWindow::MainWindow(QMainWindow *parent, ControlData *ctrlData) : QMainWindow
   configureMenu();
 
   configureSettingWindow();
+  configureReplaceDialog();
+
   configureAboutWindow();
 
   configureRProcessDialog();
@@ -181,6 +183,10 @@ void MainWindow::configureLanguageActions(){
 
 void MainWindow::configureSettingWindow(){
   settingWindow = new SettingDialog(this, localControl);
+}
+
+void MainWindow::configureReplaceDialog(){
+  replaceDialog = new ReplaceDialog(this, localControl);
 }
 
 void MainWindow::configureAboutWindow(){

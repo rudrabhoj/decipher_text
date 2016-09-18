@@ -29,6 +29,10 @@ SOURCES += src/Interface/PageNav.cxx
 SOURCES += src/Interface/SettingDialog.cxx
 SOURCES += src/Interface/RecognizeProcess.cxx
 SOURCES += src/Interface/About.cxx
+SOURCES += src/Interface/ReplaceDialog.cxx
+
+HEADERS  += inc/Interface/ReplaceDialog.hh
+FORMS    += ui/ReplaceDialog.ui
 
 #Link
 LIBS += -llept
