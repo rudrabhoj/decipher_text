@@ -3,8 +3,8 @@ IDI_ICON1   ICON    DISCARDABLE "share/decipher_text/icons/app_icon.ico"
 #include <windows.h>
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     0,5,0,0
-PRODUCTVERSION  0,5,0,0
+FILEVERSION     0,9,0,0
+PRODUCTVERSION  0,9,0,0
 BEGIN
   BLOCK "StringFileInfo"
     BEGIN
@@ -12,7 +12,7 @@ BEGIN
         BEGIN
           VALUE "CompanyName",        "Agnis Technology"
           VALUE "FileDescription",    "Open source Optical Character Recognition software based upon tesseract_ocr using Qt5."
-          VALUE "FileVersion",        "0.5.0.0\0"
+          VALUE "FileVersion",        "0.9.0.0\0"
           VALUE "InternalName",       "Decipher Text"
           VALUE "LegalCopyright",     "Copyright (c) 2016 Agnis Technology"
           VALUE "LegalTrademarks1",   "All Rights Reserved"

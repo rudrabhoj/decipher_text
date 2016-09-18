@@ -58,5 +58,5 @@ QString ControlData::createName(){
 }
 
 QString ControlData::getVersion(){
-  return "0.5-alpha";
+  return "0.9.0-alpha";
 }
