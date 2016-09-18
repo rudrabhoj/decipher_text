@@ -35,6 +35,7 @@ Makefile
 work.sh
 work.bat
 .qmake.stash
+moc_*
 
 #SUBLIME SPECIFIC
 # cache files for sublime text
