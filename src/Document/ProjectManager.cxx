@@ -179,8 +179,14 @@ void ProjectManager::createProjectFile(QString targetName, QString projContents)
 
   pFile.setFileName(targetName);
 
-  if (pFile.open(QIODevice::WriteOnly)){
+  if (pFile.open(QIODevice::WriteOnly | QIODevice::Text)){
+    QString newContents;
     QTextStream out(&pFile);
+    out.setCodec("UTF-8");
+    out.setAutoDetectUnicode(true);
+    out.setGenerateByteOrderMark(true);
+
+    newContents = QString::fromUtf8(projContents.toUtf8().data());
 
     out << projContents;
 
