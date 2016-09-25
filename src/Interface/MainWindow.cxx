@@ -101,6 +101,7 @@ void MainWindow::configureAction(){
   QString zoomInString = "&Zoom In";
   QString zoomOutString = "&Zoom Out";
   QString zoomNormalString = "&Zoom Normal";
+  QString replaceTextString = "&Replace Text";
   QString fontSettingsString = "&Font Preferences";
   QString orcNowString = "&OCR Current Page";
   QString orcAllString = "&OCR All Pages";
@@ -145,6 +146,8 @@ void MainWindow::configureAction(){
 
   zoomNormal = new QAction(QIcon(zoomNormalPix), zoomNormalString, this);
   zoomNormal->setIconVisibleInMenu(false);
+
+  replaceText = new QAction(replaceTextString, this);
 
   orcNow = new QAction(QIcon(ocrNowPix), orcNowString, this);
   orcNow->setIconVisibleInMenu(false);
@@ -211,6 +214,7 @@ void MainWindow::configureMenuConnections(){
   connect(zoomIn, &QAction::triggered, this, [&](){canvasObject->zoomIn();});
   connect(zoomOut, &QAction::triggered, this, [&](){canvasObject->zoomOut();});
   connect(zoomNormal, &QAction::triggered, this, [&](){canvasObject->zoomNormal();});
+  connect(replaceText, &QAction::triggered, this, &MainWindow::handleReplaceText);
 
   connect(fontSettings, &QAction::triggered, this, &MainWindow::setFontPreferences);
 
@@ -261,6 +265,15 @@ void MainWindow::handleLanguageChange(){
   }
 
   std::cout << localControl->getLanguage()->getLanguageArgument().toUtf8().data() << std::endl;
+}
+
+void MainWindow::handleReplaceText(){
+  int i;
+  i = pageList->currentRow();
+
+  if (i > -1){
+    replaceDialog->displayDialog(i);
+  }
 }
 
 void MainWindow::handleOpenProject(){
@@ -324,6 +337,7 @@ void MainWindow::configureMenu(){
   tools = this->menuBar()->addMenu(toolsString);
   tools->addAction(orcNow);
   tools->addAction(orcAll);
+  tools->addAction(replaceText);
   tools->addAction(fontSettings);
   tools->addAction(prefSettings);
 
@@ -385,6 +399,10 @@ void MainWindow::listItemChanged(){
     canvasObject->cleanPage();
     editor->clear();
   }
+}
+
+void MainWindow::handleCurrentReplaced(){
+  loadOCRedText();
 }
 
 void MainWindow::updateWindowName(){
@@ -519,10 +537,12 @@ void MainWindow::setSignalWrappers(){
   pageUpdateWrapper = [&](){syncNavbar();};
   listNavUpdateWrapper = [&](){ listItemChanged(); };
   saveChanged = [&](){ updateWindowName(); };
+  currentReplaced = [&](){ handleCurrentReplaced(); };
 
   localControl->getPubSub()->subscribe("pagesChanged", &pageUpdateWrapper);
   localControl->getPubSub()->subscribe("saveChanged", &saveChanged);
   localControl->getPubSub()->subscribe("pageNavSelChanged", &listNavUpdateWrapper);
+  localControl->getPubSub()->subscribe("currentReplaced", &currentReplaced);
 }
 
 

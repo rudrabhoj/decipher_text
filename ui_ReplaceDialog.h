@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ReplaceDialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.6.1
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -41,6 +41,7 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QPushButton *currentButton;
     QPushButton *allButton;
+    QPushButton *closeButton;
 
     void setupUi(QDialog *ReplaceDialog)
     {
@@ -112,6 +113,11 @@ public:
 
         horizontalLayout_3->addWidget(allButton);
 
+        closeButton = new QPushButton(ReplaceDialog);
+        closeButton->setObjectName(QStringLiteral("closeButton"));
+
+        horizontalLayout_3->addWidget(closeButton);
+
 
         verticalLayout->addLayout(horizontalLayout_3);
 
@@ -131,6 +137,7 @@ public:
         label_2->setText(QApplication::translate("ReplaceDialog", "Replace:", 0));
         currentButton->setText(QApplication::translate("ReplaceDialog", "Replace Current Page", 0));
         allButton->setText(QApplication::translate("ReplaceDialog", "Replace All Pages", 0));
+        closeButton->setText(QApplication::translate("ReplaceDialog", "Close", 0));
     } // retranslateUi
 
 };

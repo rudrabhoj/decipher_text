@@ -68,6 +68,7 @@ private:
   QAction *zoomIn;
   QAction *zoomOut;
   QAction *zoomNormal;
+  QAction *replaceText;
   QAction *orcNow;
   QAction *orcAll;
   QAction *fontSettings;
@@ -107,6 +108,7 @@ private:
   void handleLanguageChange();
 
   void handleOpenProject();
+  void handleReplaceText();
   void handleSaveAsProject();
   void handleSaveProject();
   void handleNewProject();
@@ -115,6 +117,7 @@ private:
   void showLoadDialog();
 
   void listItemChanged();
+  void handleCurrentReplaced();
   void updateWindowName();
 
 
@@ -122,6 +125,7 @@ private:
   std::function<void()> pageUpdateWrapper;
   std::function<void()> listNavUpdateWrapper;
   std::function<void()> saveChanged;
+  std::function<void()> currentReplaced;
   void loadOCRedText();
   QString configurAppName();
 
